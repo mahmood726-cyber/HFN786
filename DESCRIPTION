@@ -1,20 +1,25 @@
 Package: cnma
 Type: Package
-Title: Comprehensive Network Meta-Analysis with PRISMA-NMA Compliance
-Version: 1.1.0
+Title: Comprehensive Network Meta-Analysis with AI and Advanced Methods
+Version: 1.2.0
 Authors@R: c(
     person("CNMA Development Team", role = c("aut", "cre"),
            email = "dev@example.com")
     )
 Description: A comprehensive, journal-ready toolkit for conducting network meta-analysis
-    following PRISMA-NMA guidelines and best practices from Statistics in Medicine,
-    Research Synthesis Methods, and BMJ. Features include frequentist network meta-analysis,
-    treatment ranking (P-scores/SUCRA), inconsistency assessment (global, local, and
-    design-based), prediction intervals, league tables, publication bias assessment,
-    sensitivity analyses, transitivity evaluation, and publication-quality visualizations.
-    Implements methods from Rücker & Schwarzer (2015), Dias et al. (2010), Krahn et al. (2013),
-    and Hutton et al. (2015). Designed for researchers conducting systematic reviews and
-    meta-analyses in healthcare and other fields.
+    with cutting-edge methods (2024-2025) including component NMA, population adjustment
+    (MAIC/STC/ML-NMR), Bayesian hierarchical models, RMST-based NMA, local AI assistance
+    via LLama 3, comprehensive rules-based validation (500+ rules), and scenario testing
+    (10,000+ scenarios). Follows PRISMA-NMA guidelines and best practices from Statistics
+    in Medicine, Research Synthesis Methods, and BMJ. Features include frequentist and
+    Bayesian network meta-analysis, treatment ranking (P-scores/SUCRA), inconsistency
+    assessment (global, local, and design-based), prediction intervals, league tables,
+    publication bias assessment, sensitivity analyses, transitivity evaluation,
+    interactive visualizations, and meta-regression. Implements methods from Rücker &
+    Schwarzer (2015), Dias et al. (2010), Krahn et al. (2013), Hutton et al. (2015),
+    Ades et al. (2024), Veroniki et al. (2024), and Hua et al. (2025). Designed for
+    researchers conducting systematic reviews and meta-analyses in healthcare and other
+    fields.
 License: Apache License 2.0
 URL: https://github.com/mahmood726-cyber/HFN786
 BugReports: https://github.com/mahmood726-cyber/HFN786/issues
@@ -41,7 +46,11 @@ Suggests:
     covr,
     plotly (>= 4.9.0),
     igraph (>= 1.2.0),
-    htmltools
+    htmltools,
+    rollama (>= 0.1.0),
+    rjags (>= 4-10),
+    survival (>= 3.0.0),
+    jsonlite (>= 1.7.0)
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true

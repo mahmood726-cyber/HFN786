@@ -68,6 +68,45 @@ export(print.cnma_metaregression)
 export(print.cnma_interaction)
 export(print.cnma_covariate_exploration)
 
+# Advanced statistical methods
+export(component_nma)
+export(population_adjustment)
+export(bayesian_hierarchical_nma)
+export(rmst_nma)
+export(print.cnma_component)
+export(print.nma_population_adjusted)
+export(print.bayesian_hierarchical_nma)
+export(print.rmst_nma)
+
+# AI integration (local LLama 3)
+export(configure_llama3)
+export(ai_quality_check)
+export(ai_interpret_results)
+export(ai_recommend_analysis)
+export(ai_diagnose_error)
+export(ai_draft_manuscript)
+export(print.ai_quality_check)
+export(print.ai_interpretation)
+export(print.ai_recommendations)
+
+# Rules-based validation engine
+export(initialize_rules_engine)
+export(run_rules_validation)
+export(print.cnma_rules_engine)
+export(print.cnma_validation_report)
+
+# Scenario database and testing
+export(generate_scenario_database)
+export(run_scenario_testing)
+export(print.cnma_scenario_database)
+export(print.cnma_scenario_test_results)
+
+# Integrated AI-powered workflow
+export(run_ai_powered_nma)
+export(ai_troubleshoot)
+export(print.cnma_ai_powered)
+export(print.cnma_ai_troubleshoot)
+
 # Package imports
 import(dplyr)
 import(ggplot2)

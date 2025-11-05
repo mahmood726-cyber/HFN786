@@ -1,23 +1,62 @@
-# CNMA: Comprehensive Network Meta-Analysis
+# CNMA: Comprehensive Network Meta-Analysis with AI
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![R](https://img.shields.io/badge/R-%E2%89%A5%204.0.0-blue.svg)](https://www.r-project.org/)
-[![Version](https://img.shields.io/badge/Version-1.1.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
+[![Version](https://img.shields.io/badge/Version-1.2.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
 [![PRISMA-NMA](https://img.shields.io/badge/PRISMA--NMA-Compliant-brightgreen.svg)](https://www.prisma-statement.org/nma)
+[![AI-Powered](https://img.shields.io/badge/AI-LLama%203-orange.svg)](https://ollama.com/)
 
-A **publication-ready**, journal-quality toolkit for conducting network meta-analysis following **PRISMA-NMA guidelines** and best practices from leading statistics journals (*Statistics in Medicine*, *Research Synthesis Methods*, *BMJ*, *Journal of Clinical Epidemiology*).
+A **cutting-edge**, AI-powered toolkit for conducting network meta-analysis with the latest methods from *Statistics in Medicine* (2024-2025), *Research Synthesis Methods*, and *BMJ*. Features local AI assistance via **LLama 3**, comprehensive rules-based validation (**500+ rules**), and massive scenario testing (**10,000+ scenarios**).
 
-## ⭐ What's New in Version 1.1.0
+## 🚀 What's New in Version 1.2.0
 
-**Journal-Ready Features** based on statistics literature:
-- ✅ **Treatment Rankings**: P-scores and SUCRA (Rücker & Schwarzer, 2015)
-- ✅ **Inconsistency Assessment**: Global, local (node-splitting), and design-based (Dias et al., 2010; Krahn et al., 2013)
-- ✅ **Prediction Intervals**: Account for heterogeneity (IntHout et al., 2016)
-- ✅ **League Tables**: Standard BMJ/Lancet format
-- ✅ **PRISMA-NMA Compliance**: Automated reporting (Hutton et al., 2015)
-- ✅ **Publication-Quality Visualizations**: Network plots, forest plots, ranking plots, funnel plots, net heat plots
-- ✅ **Sensitivity Analyses**: Leave-one-out, publication bias, model comparison
-- ✅ **Transitivity Assessment**: Evaluate similarity assumption
+### 🤖 AI-Powered Intelligence (Local LLama 3)
+- ✨ **AI Quality Assessment**: Intelligent data quality checks with recommendations
+- ✨ **AI Result Interpretation**: Plain-language clinical interpretations
+- ✨ **AI Analysis Recommendations**: Suggest optimal analysis approaches
+- ✨ **AI Error Diagnosis**: Troubleshoot issues with step-by-step solutions
+- ✨ **AI Manuscript Drafting**: Generate methods/results sections (BMJ, Lancet, JAMA formats)
+- 🔒 **100% Local/Offline**: No data leaves your computer (via Ollama)
+
+### 📋 Comprehensive Rules Engine (500+ Rules)
+- ✅ **Data Quality**: 60 rules for data validation and integrity
+- ✅ **Network Structure**: 55 rules for connectivity and geometry
+- ✅ **Statistical Assumptions**: 75 rules for validity checks
+- ✅ **Heterogeneity**: 50 rules for detection and management
+- ✅ **Inconsistency**: 45 rules for consistency evaluation
+- ✅ **Publication Bias**: 35 rules for bias assessment
+- ✅ **Reporting Quality**: 60 PRISMA-NMA compliance rules
+- ✅ **Effect Sizes**: 40 rules for appropriate metrics
+- ✅ **Sample Sizes**: 30 rules for adequacy checks
+- ✅ **Covariates**: 40 rules for covariate handling
+- ✅ **Bayesian Methods**: 30 rules for Bayesian analyses
+- ✅ **Sensitivity**: 25 rules for robustness checks
+- ✅ **Interpretation**: 30 rules for appropriate conclusions
+
+### 🧪 Massive Scenario Testing (10,000+ Scenarios)
+- 📊 **Valid Scenarios**: 3,000+ normal operation tests
+- ❌ **Invalid Scenarios**: 2,500+ error detection tests
+- ⚠️ **Boundary Scenarios**: 1,500+ limit condition tests
+- 🔄 **Edge Case Scenarios**: 1,500+ unusual situation tests
+- 🏥 **Real-World Scenarios**: 1,000+ clinical context tests
+- 💪 **Stress Test Scenarios**: 500+ extreme condition tests
+
+### 📈 Advanced Statistical Methods (2024-2025)
+- ⚡ **Component NMA**: Analyze multicomponent interventions (Welton et al., 2023)
+- ⚡ **Population Adjustment**: MAIC/STC/ML-NMR for unbalanced networks (NICE, 2024)
+- ⚡ **Bayesian Hierarchical Models**: Heavy-tailed distributions with class effects (Ades et al., 2024)
+- ⚡ **RMST-based NMA**: Time-to-event with restricted mean survival time (Hua et al., 2025)
+
+### 🎨 Interactive Visualizations
+- 🖱️ **Interactive Network Plots**: Zoom, pan, hover with plotly
+- 🖱️ **Interactive Forest Plots**: Explore results dynamically
+- 🖱️ **Interactive Rankings**: Bar charts and lollipop plots
+- 🖱️ **Complete Dashboards**: Export to HTML for sharing
+
+### 🔬 Enhanced Meta-Regression
+- 📊 **Network Meta-Regression**: Explore treatment effect modifiers
+- 📊 **Covariate Interactions**: Test for effect modification
+- 📊 **Multiple Covariate Screening**: FDR-adjusted exploration
 
 ## Features
 
@@ -160,6 +199,295 @@ prisma_report <- generate_prisma_report(results, "markdown", "prisma_report.md")
 ```r
 # Quickstart with all defaults
 results <- cnma_quickstart(n_studies = 20)
+```
+
+### 🤖 AI-Powered Workflow (NEW in v1.2.0)
+
+Complete analysis with AI assistance, rules validation, and quality assurance:
+
+```r
+library(cnma)
+
+# Step 1: Install and start Ollama (one-time setup)
+# Download from: https://ollama.com/download
+# Then run: ollama pull llama3
+
+# Step 2: Run AI-powered comprehensive analysis
+data <- simulate_cnma_data(40, seed = 123)
+
+results <- run_ai_powered_nma(
+  data,
+  ai_model = "llama3",           # Local LLama 3 model
+  validate_rules = TRUE,          # 500+ rules validation
+  ai_interpretation = TRUE,       # AI insights
+  output_dir = "nma_analysis"
+)
+
+# The workflow automatically:
+# ✓ Configures local AI (no data sent externally)
+# ✓ Runs AI quality assessment on your data
+# ✓ Validates against 500+ rules
+# ✓ Performs comprehensive NMA
+# ✓ Generates AI interpretation
+# ✓ Provides actionable recommendations
+
+# Access components:
+print(results$validation_report)      # Rules violations
+print(results$ai_quality_assessment)  # AI data quality check
+print(results$ai_interpretation)      # AI result interpretation
+print(results$nma_results)            # Main NMA results
+```
+
+### 🔍 AI-Assisted Troubleshooting
+
+When errors occur, get AI-powered diagnosis:
+
+```r
+# If analysis fails
+result <- tryCatch(
+  run_cnma_analysis(problematic_data),
+  error = function(e) e
+)
+
+if (inherits(result, "error")) {
+  # Get AI diagnosis and solutions
+  diagnosis <- ai_troubleshoot(result, problematic_data,
+                               context = "Running NMA on diabetes data")
+
+  # AI will explain:
+  # - What caused the error
+  # - Step-by-step fix
+  # - How to prevent it
+  # - Related issues to check
+}
+```
+
+### 📋 Rules-Based Validation (500+ Rules)
+
+Comprehensive quality assurance:
+
+```r
+# Initialize rules engine
+engine <- initialize_rules_engine()
+print(engine)  # Shows 500+ rules across 13 categories
+
+# Run validation
+report <- run_rules_validation(
+  data,
+  nma_results = NULL,  # Can validate before or after analysis
+  engine = engine,
+  severity_threshold = "warning",
+  ai_assist = TRUE     # Get AI recommendations
+)
+
+# Review violations
+print(report)
+View(report$violations)
+
+# AI recommendations for fixing issues
+cat(report$ai_recommendations)
+```
+
+### 🧪 Scenario Testing (10,000+ Scenarios)
+
+Test your analysis pipeline:
+
+```r
+# Generate comprehensive scenario database
+scenarios <- generate_scenario_database(
+  n_scenarios = 10000,
+  seed = 42
+)
+
+print(scenarios)
+# Shows distribution across:
+# - Valid scenarios (3,000)
+# - Invalid scenarios (2,500)
+# - Boundary scenarios (1,500)
+# - Edge cases (1,500)
+# - Real-world scenarios (1,000)
+# - Stress tests (500)
+
+# Run testing
+test_results <- run_scenario_testing(scenarios, verbose = TRUE)
+
+# Review results
+print(test_results)
+# Pass rate, failures, execution time
+```
+
+### 📈 Advanced Methods (2024-2025)
+
+#### Component Network Meta-Analysis
+
+Analyze multicomponent interventions:
+
+```r
+# For treatments with multiple components (e.g., CBT + Exercise + Medication)
+results <- component_nma(
+  data,
+  components = c("CBT", "Exercise", "Medication"),
+  model = "interaction",     # additive, interaction, or full
+  disconnected = TRUE        # Reconnect disconnected networks
+)
+
+print(results$component_effects)  # Effect of each component
+```
+
+#### Population Adjustment
+
+Handle unbalanced networks with individual patient data:
+
+```r
+# Adjust for population differences
+adjusted <- population_adjustment(
+  ipd = individual_patient_data,
+  agd = aggregate_data,
+  covariates = c("age", "sex", "baseline_severity"),
+  method = "ML-NMR"  # NICE recommended (or MAIC, STC)
+)
+
+print(adjusted$adjusted_effects)
+print(adjusted$effective_sample_size)
+```
+
+#### Bayesian Hierarchical Models
+
+Robust models with heavy-tailed distributions:
+
+```r
+results <- bayesian_hierarchical_nma(
+  data,
+  distribution = "t",         # More robust than normal
+  df = 4,                     # Degrees of freedom
+  class_effects = TRUE,       # Use treatment classes
+  n_chains = 4,
+  n_iter = 20000
+)
+
+print(results$summary)
+print(results$convergence)
+```
+
+#### RMST-based NMA for Survival Data
+
+Time-to-event analysis with restricted mean survival time:
+
+```r
+# For survival/time-to-event data
+results <- rmst_nma(
+  survival_data,
+  time = "time",
+  event = "status",
+  tau = 24  # Restriction time (e.g., 24 months)
+)
+
+print(results$nma)
+```
+
+### 🤖 AI Individual Features
+
+Use AI components separately:
+
+```r
+# Configure AI once
+configure_llama3(model = "llama3", temperature = 0.7, seed = 42)
+
+# Data quality check
+quality <- ai_quality_check(data, verbose = TRUE)
+
+# Result interpretation
+interpretation <- ai_interpret_results(
+  nma_results,
+  context = "depression treatment",
+  target_audience = "clinical"  # or "academic", "patient"
+)
+
+# Analysis recommendations
+recommendations <- ai_recommend_analysis(
+  data,
+  research_question = "Which antidepressant is most effective?",
+  constraints = "Need results within 1 week"
+)
+
+# Error diagnosis
+diagnostics <- ai_diagnose_error(
+  error_message = "Error: TE/seTE contain non-finite values",
+  context = "data validation"
+)
+
+# Manuscript drafting
+methods <- ai_draft_manuscript(
+  nma_results,
+  section = "methods",        # or "results", "abstract"
+  journal_style = "BMJ"       # or "Lancet", "JAMA", "generic"
+)
+cat(methods)
+```
+
+### 🎨 Interactive Visualizations
+
+Create interactive plots with plotly:
+
+```r
+# Interactive network plot
+plot <- plot_interactive_network(
+  nma,
+  node_size_var = "n_studies",
+  edge_width_var = "n_studies",
+  layout = "fr"  # Fruchterman-Reingold layout
+)
+plot  # Display in RStudio viewer
+
+# Interactive forest plot
+plot <- plot_interactive_forest(nma, reference = "Placebo")
+
+# Interactive rankings
+plot <- plot_interactive_rankings(
+  nma,
+  plot_type = "bar",  # or "lollipop"
+  show_uncertainty = TRUE
+)
+
+# Complete dashboard (exports to HTML)
+create_interactive_dashboard(
+  nma,
+  output_file = "nma_dashboard.html",
+  title = "Antidepressant NMA Dashboard"
+)
+```
+
+### 🔬 Meta-Regression
+
+Explore treatment effect modifiers:
+
+```r
+# Network meta-regression
+metareg <- run_metaregression(
+  data,
+  nma,
+  covariates = c("age_mean", "female_pct", "baseline_severity")
+)
+
+print(metareg)
+
+# Test specific interactions
+interaction <- test_covariate_interaction(
+  data,
+  nma,
+  covariate = "baseline_severity",
+  treatment = "DrugA"
+)
+
+# Screen multiple covariates
+screening <- explore_multiple_covariates(
+  data,
+  nma,
+  covariates = c("age", "sex", "severity", "duration"),
+  adjust_pvalues = TRUE  # FDR adjustment
+)
+
+print(screening)
 ```
 
 ## Detailed Usage
