@@ -54,6 +54,20 @@ export(print.cnma_loo)
 export(print.cnma_pub_bias)
 export(print.cnma_model_comparison)
 
+# Interactive visualizations
+export(plot_interactive_network)
+export(plot_interactive_forest)
+export(plot_interactive_rankings)
+export(create_interactive_dashboard)
+
+# Meta-regression
+export(run_metaregression)
+export(test_covariate_interaction)
+export(explore_multiple_covariates)
+export(print.cnma_metaregression)
+export(print.cnma_interaction)
+export(print.cnma_covariate_exploration)
+
 # Package imports
 import(dplyr)
 import(ggplot2)
