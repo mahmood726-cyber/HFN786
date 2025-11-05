@@ -1,0 +1,37 @@
+bibentry(
+  bibtype = "Manual",
+  title = "cnma: Comprehensive Network Meta-Analysis with PRISMA-NMA Compliance",
+  author = "CNMA Development Team",
+  year = "2025",
+  note = "R package version 1.1.0",
+  url = "https://github.com/mahmood726-cyber/HFN786",
+  textVersion = paste(
+    "CNMA Development Team (2025).",
+    "cnma: Comprehensive Network Meta-Analysis with PRISMA-NMA Compliance.",
+    "R package version 1.1.0.",
+    "https://github.com/mahmood726-cyber/HFN786"
+  )
+)
+
+bibentry(
+  bibtype = "Article",
+  title = "Key Methodological References Implemented in cnma",
+  author = c(
+    person("Guido", "Rücker"),
+    person("Gerta", "Rücker"),
+    person("Sofia", "Dias"),
+    person("Ulrike", "Krahn"),
+    person("Brian", "Hutton"),
+    person("Joanne", "IntHout")
+  ),
+  year = "2015-2016",
+  note = "Collection of methodological papers",
+  textVersion = paste(
+    "cnma implements methods from:",
+    "Rücker & Schwarzer (2015) BMC Med Res Methodol;",
+    "Dias et al. (2010) Stat Med;",
+    "Krahn et al. (2013) BMC Med Res Methodol;",
+    "Hutton et al. (2015) Ann Intern Med;",
+    "IntHout et al. (2016) BMJ Open"
+  )
+)

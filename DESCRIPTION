@@ -1,0 +1,85 @@
+Package: cnma
+Type: Package
+Title: Comprehensive Network Meta-Analysis with AI and Advanced Methods
+Version: 1.7.0
+Authors@R: c(
+    person("CNMA Development Team", role = c("aut", "cre"),
+           email = "dev@example.com")
+    )
+Description: A revolutionary, journal-ready toolkit for network meta-analysis with
+    cutting-edge methods (2024-2025), machine learning predictions, complete manuscript
+    generation, database backend, and interactive HTML reports. Includes component NMA,
+    population adjustment (MAIC/STC/ML-NMR), Bayesian hierarchical models, RMST-based NMA,
+    local AI (LLama 3), 1,635 validation rules, 10,000+ scenarios, professional bs4Dash
+    dashboards, machine learning for treatment ranking prediction and pattern detection,
+    complete manuscript generation to Word/PDF, interactive HTML reports with all
+    visualizations, GRADE evidence profiles, PRISMA flow diagrams, Sankey diagrams,
+    animated visualizations, ROB2 plots, 3D surface plots, and SQLite database for
+    analysis storage. Features frequentist and Bayesian NMA, P-scores/SUCRA rankings,
+    inconsistency assessment, prediction intervals, league tables, publication bias
+    assessment, leave-one-out sensitivity, net splitting, transitivity evaluation,
+    interactive visualizations (visNetwork, plotly), meta-regression, automated reporting,
+    and complete report packages. Implements methods from Rücker & Schwarzer (2015),
+    Dias et al. (2010), Krahn et al. (2013), Hutton et al. (2015), Ades et al. (2024),
+    Veroniki et al. (2024), and Hua et al. (2025). Inspired by mahmood789/786-MIII-
+    Meta-analysis. Designed for systematic reviews and meta-analyses in healthcare and
+    other fields.
+License: Apache License 2.0
+URL: https://github.com/mahmood726-cyber/HFN786
+BugReports: https://github.com/mahmood726-cyber/HFN786/issues
+Depends:
+    R (>= 4.0.0)
+Imports:
+    netmeta (>= 2.0.0),
+    ggplot2 (>= 3.3.0),
+    dplyr (>= 1.0.0),
+    tidyr (>= 1.0.0),
+    purrr (>= 0.3.0),
+    tibble (>= 3.0.0),
+    stats,
+    utils,
+    grDevices,
+    graphics
+Suggests:
+    digest (>= 0.6.0),
+    future (>= 1.0.0),
+    future.apply (>= 1.0.0),
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    covr,
+    plotly (>= 4.9.0),
+    igraph (>= 1.2.0),
+    htmltools,
+    htmlwidgets,
+    rollama (>= 0.1.0),
+    rjags (>= 4-10),
+    survival (>= 3.0.0),
+    jsonlite (>= 1.7.0),
+    reshape2 (>= 1.4.0),
+    shiny (>= 1.7.0),
+    shinydashboard (>= 0.7.0),
+    bs4Dash (>= 2.0.0),
+    visNetwork (>= 2.1.0),
+    promises (>= 1.2.0),
+    readr (>= 2.0.0),
+    shinycssloaders (>= 1.0.0),
+    DT (>= 0.20),
+    randomForest (>= 4.7.0),
+    gbm (>= 2.1.0),
+    dbscan (>= 1.1.0),
+    cluster (>= 2.1.0),
+    solitude (>= 1.1.0),
+    officer (>= 0.4.0),
+    DiagrammeR (>= 1.0.0),
+    networkD3 (>= 0.4),
+    gganimate (>= 1.0.0),
+    pheatmap (>= 1.0.0),
+    RSQLite (>= 2.2.0),
+    DBI (>= 1.1.0),
+    flexdashboard (>= 0.5.0)
+VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.0
+Roxygen: list(markdown = TRUE)
