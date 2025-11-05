@@ -155,6 +155,44 @@ export(schedule_analysis)
 export(print.cnma_batch_results)
 export(print.cnma_pipeline_results)
 
+# Machine learning predictions and pattern detection
+export(ml_predict_rankings)
+export(ml_detect_patterns)
+export(ml_detect_anomalies)
+export(ml_predict_new_studies)
+export(print.cnma_ml_predictions)
+export(print.cnma_ml_patterns)
+export(print.cnma_ml_anomalies)
+export(plot.cnma_ml_predictions)
+export(plot.cnma_ml_patterns)
+
+# Complete manuscript generation
+export(generate_complete_manuscript_word)
+export(generate_complete_manuscript_pdf)
+export(generate_prisma_flowchart)
+
+# Advanced reporting templates
+export(generate_grade_table)
+export(create_sankey_evidence_flow)
+export(plot_rob_summary)
+export(create_animated_temporal_trends)
+export(create_3d_surface_plot)
+export(print.cnma_grade_table)
+
+# Database backend
+export(initialize_cnma_database)
+export(create_project)
+export(list_projects)
+export(save_dataset)
+export(load_dataset)
+export(save_analysis)
+export(load_analysis)
+export(search_analyses)
+export(get_rankings_comparison)
+export(close_database)
+export(get_database_summary)
+export(print.cnma_db_summary)
+
 # Package imports
 import(dplyr)
 import(ggplot2)

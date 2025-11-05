@@ -2,15 +2,271 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![R](https://img.shields.io/badge/R-%E2%89%A5%204.0.0-blue.svg)](https://www.r-project.org/)
-[![Version](https://img.shields.io/badge/Version-1.5.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
+[![Version](https://img.shields.io/badge/Version-1.6.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
 [![PRISMA-NMA](https://img.shields.io/badge/PRISMA--NMA-Compliant-brightgreen.svg)](https://www.prisma-statement.org/nma)
 [![AI-Powered](https://img.shields.io/badge/AI-LLama%203-orange.svg)](https://ollama.com/)
-[![Manuscript Generation](https://img.shields.io/badge/Manuscript-AI--Generated-purple.svg)]()
-[![bs4Dash](https://img.shields.io/badge/Dashboard-bs4Dash-blue.svg)]()
-[![visNetwork](https://img.shields.io/badge/Network-visNetwork-brightgreen.svg)]()
-[![Modular Architecture](https://img.shields.io/badge/Architecture-Modular-orange.svg)]()
+[![Machine Learning](https://img.shields.io/badge/ML-Predictions-red.svg)]()
+[![Manuscript](https://img.shields.io/badge/Manuscript-Word%2FPDF-purple.svg)]()
+[![Database](https://img.shields.io/badge/Database-SQLite-blue.svg)]()
+[![GRADE](https://img.shields.io/badge/GRADE-Tables-green.svg)]()
 
-A **revolutionary**, AI-powered toolkit for conducting network meta-analysis with the latest methods from *Statistics in Medicine* (2024-2025), *Research Synthesis Methods*, and *BMJ*. Features **professional bs4Dash dashboards**, **modular architecture**, **asynchronous processing**, **18+ result tabs**, **leave-one-out sensitivity**, **net splitting**, **visNetwork interactivity**, **12 advanced visualizations**, **1,635 validation rules**, **20,000+ text permutations**, and **complete automation**.
+A **revolutionary**, AI-powered toolkit with **machine learning predictions**, **complete manuscript generation**, and **database backend**. Features **treatment ranking prediction**, **pattern detection**, **anomaly detection**, **Word/PDF manuscript generation**, **GRADE evidence profiles**, **PRISMA flow diagrams**, **Sankey diagrams**, **animated visualizations**, **3D plots**, **SQLite database**, **bs4Dash dashboards**, **1,635 validation rules**, **20,000+ text permutations**, and **complete automation**.
+
+## 🚀 What's New in Version 1.6.0
+
+### 🤖 Machine Learning Predictions
+
+**Treatment Ranking Prediction:**
+```r
+# Predict treatment rankings using machine learning
+ml_model <- ml_predict_rankings(
+  data, nma_results,
+  predictors = c("year", "age_mean", "female_pct"),
+  method = "rf"  # or "gbm"
+)
+
+print(ml_model)  # Performance metrics
+plot(ml_model, type = "importance")  # Variable importance
+plot(ml_model, type = "predictions")  # Actual vs predicted
+
+# Predict for new studies
+new_studies <- data.frame(year = 2025, age_mean = 65, female_pct = 0.5)
+predictions <- ml_predict_new_studies(ml_model, new_studies)
+```
+
+**Pattern Detection:**
+```r
+# Detect patterns using clustering
+patterns <- ml_detect_patterns(
+  data, nma_results,
+  method = "kmeans",  # or "hierarchical", "dbscan"
+  n_clusters = 3
+)
+
+print(patterns)  # Cluster summary
+plot(patterns, type = "scatter")  # PCA visualization
+plot(patterns, type = "heatmap")  # Cluster centroids
+```
+
+**Anomaly Detection:**
+```r
+# Identify outlier studies
+anomalies <- ml_detect_anomalies(
+  data, nma_results,
+  method = "isolation_forest",  # or "lof"
+  contamination = 0.1
+)
+
+print(anomalies)  # Lists anomalous studies
+```
+
+**Key Features:**
+- **Random Forest & Gradient Boosting** for prediction
+- **K-means, Hierarchical, DBSCAN** for clustering
+- **Isolation Forest & LOF** for anomaly detection
+- Cross-validation and performance metrics
+- Variable importance analysis
+- Silhouette scores for cluster quality
+
+### 📝 Complete Manuscript Generation
+
+**Generate Publication-Ready Word Documents:**
+```r
+# Create complete manuscript with all sections
+manuscript_file <- generate_complete_manuscript_word(
+  nma_results, data,
+  title = "Network Meta-Analysis of Treatment Efficacy",
+  authors = c("Smith JA", "Jones BC", "Williams DE"),
+  affiliations = c("University Hospital", "Research Institute"),
+  journal_style = "BMJ",
+  output_file = "my_manuscript.docx",
+  include_figures = TRUE,
+  include_tables = TRUE
+)
+
+# Opens in Microsoft Word - fully formatted and ready to submit!
+```
+
+**Generate PDF Manuscripts:**
+```r
+# Create PDF via R Markdown and LaTeX
+manuscript_pdf <- generate_complete_manuscript_pdf(
+  nma_results, data,
+  title = "Network Meta-Analysis",
+  authors = c("Author 1", "Author 2"),
+  journal_style = "Lancet",
+  output_file = "manuscript.pdf"
+)
+```
+
+**What's Included:**
+- ✅ **Title page** with authors and affiliations
+- ✅ **Structured abstract** (Background, Methods, Results, Conclusions)
+- ✅ **Introduction** section
+- ✅ **Methods** section (AI-generated, 500+ rules, PRISMA-NMA compliant)
+- ✅ **Results** section (AI-generated, 500+ rules)
+- ✅ **Discussion** section with interpretation
+- ✅ **Tables** (study characteristics, league table, rankings)
+- ✅ **Figure captions** (placeholders for network, forest, ranking plots)
+- ✅ **References** (key NMA methodology papers)
+- ✅ **Journal-specific formatting** (BMJ, Lancet, JAMA, NEJM, generic)
+
+### 📊 Advanced Reporting Templates
+
+**GRADE Evidence Profile Tables:**
+```r
+# Generate GRADE tables automatically
+grade_table <- generate_grade_table(
+  nma_results, data,
+  output_file = "grade_evidence_profile.csv"
+)
+
+print(grade_table)
+# Shows: Comparison, N Studies, Effect Estimate, CI,
+#        Risk of Bias, Inconsistency, Indirectness,
+#        Imprecision, Publication Bias, Overall Quality
+```
+
+**PRISMA 2020 Flow Diagrams:**
+```r
+# Create PRISMA flow diagram
+generate_prisma_flowchart(
+  n_identified = 1500,
+  n_duplicates = 300,
+  n_screened = 1200,
+  n_excluded_screening = 1050,
+  n_full_text = 150,
+  n_excluded_full_text = 100,
+  n_included = 50,
+  output_file = "prisma_flow.png"
+)
+```
+
+**Sankey Diagrams for Evidence Flow:**
+```r
+# Interactive evidence flow visualization
+create_sankey_evidence_flow(
+  nma_results, data,
+  output_file = "evidence_flow.html"
+)
+# Shows flow from studies → treatments → network estimate
+```
+
+**Risk of Bias (ROB2) Visualization:**
+```r
+# Traffic light plot for ROB assessments
+rob_data <- data.frame(
+  Study = c("Study1", "Study2", "Study3"),
+  Randomization = c("Low", "Some concerns", "Low"),
+  Deviations = c("Low", "Low", "High"),
+  Missing_Data = c("Low", "Low", "Low"),
+  Measurement = c("Low", "Low", "Some concerns"),
+  Selection = c("Low", "Low", "Low")
+)
+
+plot_rob_summary(rob_data, "rob_summary.png")
+```
+
+**Animated Temporal Trends:**
+```r
+# Animated plots showing changes over time
+create_animated_temporal_trends(
+  data, nma_results,
+  output_file = "temporal_trends.gif"
+)
+```
+
+**3D Surface Plots:**
+```r
+# Interactive 3D visualization of treatment effects
+create_3d_surface_plot(
+  data, nma_results,
+  covariate1 = "age_mean",
+  covariate2 = "female_pct",
+  output_file = "surface_3d.html"
+)
+```
+
+### 🗄️ Database Backend for Analysis Storage
+
+**Initialize Database:**
+```r
+# Create SQLite database for storing analyses
+db <- initialize_cnma_database("my_analyses.db")
+
+# Create project
+project_id <- create_project(
+  db,
+  "Antidepressants NMA",
+  "Comparing efficacy of antidepressants"
+)
+
+# Save dataset
+dataset_id <- save_dataset(db, project_id, "Main Dataset", data)
+
+# Save analysis results
+analysis_id <- save_analysis(db, dataset_id, nma_results, "Frequentist NMA")
+
+# Close database
+close_database(db)
+```
+
+**Retrieve Stored Analyses:**
+```r
+# Load data and results
+db <- initialize_cnma_database("my_analyses.db")
+
+data <- load_dataset(db, dataset_id = 1)
+nma <- load_analysis(db, analysis_id = 1)
+
+# List all projects
+projects <- list_projects(db)
+
+# Search analyses
+recent_analyses <- search_analyses(
+  db,
+  min_studies = 10,
+  date_from = "2025-01-01"
+)
+
+# Compare rankings across analyses
+ranking_comparison <- get_rankings_comparison(db, c(1, 2, 3))
+
+# Database summary
+summary <- get_database_summary(db)
+print(summary)
+```
+
+**Database Features:**
+- **Projects:** Organize analyses by research project
+- **Datasets:** Store and version control study data
+- **Analyses:** Save complete NMA results
+- **Treatment Rankings:** Track rankings across analyses
+- **Reports:** Link generated reports to analyses
+- **Search & Query:** Find analyses by criteria
+- **Comparison Tools:** Compare results across analyses
+
+### 📦 New Dependencies (11 packages)
+
+**Machine Learning:**
+- `randomForest` (>= 4.7.0) - Random forest models
+- `gbm` (>= 2.1.0) - Gradient boosting machines
+- `dbscan` (>= 1.1.0) - Density-based clustering
+- `cluster` (>= 2.1.0) - Clustering analysis
+- `solitude` (>= 1.1.0) - Isolation forest
+
+**Manuscript Generation:**
+- `officer` (>= 0.4.0) - Word document generation
+- `DiagrammeR` (>= 1.0.0) - PRISMA flow diagrams
+
+**Advanced Visualizations:**
+- `networkD3` (>= 0.4) - Sankey diagrams
+- `gganimate` (>= 1.0.0) - Animated plots
+- `pheatmap` (>= 1.0.0) - Heatmaps
+
+**Database:**
+- `RSQLite` (>= 2.2.0) - SQLite database
+- `DBI` (>= 1.1.0) - Database interface
 
 ## 🚀 What's New in Version 1.5.0
 
