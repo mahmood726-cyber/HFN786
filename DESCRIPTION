@@ -48,12 +48,11 @@ Suggests:
     knitr,
     rmarkdown,
     covr,
+    pkgdown,
     plotly (>= 4.9.0),
     igraph (>= 1.2.0),
     htmltools,
     htmlwidgets,
-    rollama (>= 0.1.0),
-    rjags (>= 4-10),
     survival (>= 3.0.0),
     jsonlite (>= 1.7.0),
     reshape2 (>= 1.4.0),
@@ -83,3 +82,5 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.0
 Roxygen: list(markdown = TRUE)
+Config/Needs/website: pkgdown
+Config/testthat/edition: 3
