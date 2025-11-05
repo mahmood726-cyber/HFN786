@@ -2,14 +2,125 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![R](https://img.shields.io/badge/R-%E2%89%A5%204.0.0-blue.svg)](https://www.r-project.org/)
-[![Version](https://img.shields.io/badge/Version-1.4.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
+[![Version](https://img.shields.io/badge/Version-1.5.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
 [![PRISMA-NMA](https://img.shields.io/badge/PRISMA--NMA-Compliant-brightgreen.svg)](https://www.prisma-statement.org/nma)
 [![AI-Powered](https://img.shields.io/badge/AI-LLama%203-orange.svg)](https://ollama.com/)
 [![Manuscript Generation](https://img.shields.io/badge/Manuscript-AI--Generated-purple.svg)]()
-[![Shiny Dashboard](https://img.shields.io/badge/Dashboard-Interactive-blue.svg)]()
-[![Batch Processing](https://img.shields.io/badge/Batch-Automated-red.svg)]()
+[![bs4Dash](https://img.shields.io/badge/Dashboard-bs4Dash-blue.svg)]()
+[![visNetwork](https://img.shields.io/badge/Network-visNetwork-brightgreen.svg)]()
+[![Modular Architecture](https://img.shields.io/badge/Architecture-Modular-orange.svg)]()
 
-A **revolutionary**, AI-powered toolkit for conducting network meta-analysis with the latest methods from *Statistics in Medicine* (2024-2025), *Research Synthesis Methods*, and *BMJ*. Features **12 advanced visualizations**, **1000+ manuscript rules**, **20,000+ text permutations**, **interactive Shiny dashboards**, and **complete automation**.
+A **revolutionary**, AI-powered toolkit for conducting network meta-analysis with the latest methods from *Statistics in Medicine* (2024-2025), *Research Synthesis Methods*, and *BMJ*. Features **professional bs4Dash dashboards**, **modular architecture**, **asynchronous processing**, **18+ result tabs**, **leave-one-out sensitivity**, **net splitting**, **visNetwork interactivity**, **12 advanced visualizations**, **1,635 validation rules**, **20,000+ text permutations**, and **complete automation**.
+
+## 🚀 What's New in Version 1.5.0
+
+### 🎨 Enhanced Dashboard with bs4Dash Framework
+
+**Inspired by mahmood789/786-MIII-Meta-analysis repository** - Professional-grade Shiny application with modern Bootstrap 4 design:
+
+```r
+launch_enhanced_cnma_dashboard()  # Access at http://127.0.0.1:3939
+```
+
+**Key Features:**
+- **bs4Dash Framework**: Modern Bootstrap 4 interface (more polished than shinydashboard)
+- **Modular Architecture**: 7 functional modules for clean code organization
+- **visNetwork Integration**: Superior interactive network visualizations
+- **Asynchronous Processing**: Non-blocking analysis with future/promises
+- **18+ Comprehensive Result Tabs**: Complete analysis exploration
+- **Multiple Layout Algorithms**: FR, Kamada-Kawai, circular, tree, random, spring
+- **Advanced Sensitivity Analysis**: Automated leave-one-out analysis
+- **Net Splitting**: Local inconsistency assessment
+- **Example Data Downloads**: CSV templates for easy onboarding
+- **Universal Download Handlers**: Export every visualization and table
+- **Live Data Upload**: Drag & drop CSV with automatic validation
+- **Arm-level to Contrast-level Conversion**: Automatic pairwise conversion
+
+### 📊 Comprehensive Results Module (18 Tabs)
+
+The enhanced dashboard includes 18 dedicated result tabs:
+
+1. **Summary**: Complete NMA output
+2. **Forest Plot**: Treatment effects with download
+3. **League Table**: Pairwise comparison matrix
+4. **Rankings**: P-scores with visualization
+5. **Network Graph**: Treatment network
+6. **Net Heat**: Inconsistency heatmap
+7. **Funnel Plot**: Publication bias assessment
+8. **Contribution Matrix**: Study contributions
+9. **Heterogeneity**: I², Tau², Q statistics
+10. **Inconsistency**: Design-based decomposition
+11. **Direct vs Indirect**: Evidence type comparison
+12. **Leave-One-Out**: Influence analysis (automated)
+13. **Net Splitting**: Node-splitting results
+14. **Prediction Intervals**: Future study predictions
+15. **Meta-Regression**: Covariate analysis with residuals
+16. **All Comparisons**: Complete comparison details
+17. **Study Details**: Study-level information
+18. **Export All**: One-click ZIP download
+
+### 🔬 Advanced Sensitivity Analysis Module
+
+- **Automated Leave-One-Out**: Removes each study iteratively
+- **Influence Assessment**: Track changes in Tau², I², Q statistics
+- **Export Results**: Download complete influence table
+- **Error Handling**: Graceful handling of disconnected networks
+
+### 🌐 Interactive Network Visualization (visNetwork)
+
+Superior to plotly for network graphs:
+- **Interactive Exploration**: Drag, zoom, pan networks
+- **Multiple Layouts**: 6 layout algorithms
+- **Customizable Appearance**: Node size, edge width, labels
+- **Tooltips**: Hover for treatment and study information
+- **Both Interactive & Static**: visNetwork + igraph implementations
+
+### ⚡ Asynchronous Processing
+
+Non-blocking analysis execution:
+- **future/promises Integration**: Background processing
+- **Live Progress Tracking**: Real-time status updates
+- **Concurrent Operations**: UI remains responsive during analysis
+- **Error Handling**: Graceful failure recovery
+
+### 📥 Enhanced Data Management
+
+- **Arm-level Support**: Automatic conversion with netmeta::pairwise()
+- **Contrast-level Support**: Direct input validation
+- **Example CSV Downloads**: 3 template datasets
+- **Column Validation**: Named vector checks
+- **Log Transformation**: Optional for HR/OR/RR
+- **DataTable Preview**: Interactive data exploration
+
+### 🏗️ Modular Architecture
+
+Clean separation of concerns with 7 modules:
+1. **Instructions Module**: User guidance
+2. **Data Upload Module**: File handling & validation
+3. **Example Data Module**: Template downloads
+4. **Network Plot Module**: Interactive & static visualizations
+5. **Analysis Module**: Asynchronous NMA execution
+6. **Results Module**: 18 comprehensive result tabs
+7. **Sensitivity Module**: Leave-one-out analysis
+
+### 📦 New Dependencies
+
+- **bs4Dash** (>= 2.0.0): Modern dashboard framework
+- **visNetwork** (>= 2.1.0): Interactive network viz
+- **promises** (>= 1.2.0): Asynchronous programming
+- **readr** (>= 2.0.0): Fast CSV reading
+- **shinycssloaders** (>= 1.0.0): Loading animations
+
+### 🎯 Inspired By
+
+This version integrates best practices from the **mahmood789/786-MIII-Meta-analysis** repository:
+- Modular Shiny architecture
+- bs4Dash framework adoption
+- visNetwork for networks
+- Asynchronous processing patterns
+- Comprehensive result tabs
+- Multiple download handlers
+- Example data provision
 
 ## 🚀 What's New in Version 1.4.0
 

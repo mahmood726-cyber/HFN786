@@ -146,6 +146,7 @@ export(launch_cnma_dashboard)
 export(launch_quick_analysis)
 export(launch_visualization_explorer)
 export(launch_realtime_monitor)
+export(launch_enhanced_cnma_dashboard)
 
 # Advanced automation and batch processing
 export(run_batch_nma)
