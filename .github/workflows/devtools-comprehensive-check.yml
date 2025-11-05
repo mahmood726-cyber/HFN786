@@ -42,69 +42,11 @@ jobs:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
-      - name: Install system dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libcurl4-openssl-dev \
-            libssl-dev \
-            libxml2-dev \
-            libfontconfig1-dev \
-            libharfbuzz-dev \
-            libfribidi-dev \
-            libfreetype6-dev \
-            libpng-dev \
-            libtiff5-dev \
-            libjpeg-dev \
-            libgit2-dev \
-            libsqlite3-dev \
-            pandoc \
-            pandoc-citeproc
-
-      - name: Query dependencies
-        run: |
-          install.packages(c('remotes', 'devtools', 'rcmdcheck', 'sessioninfo'))
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
       - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE, upgrade = "always")
-          # Install all suggested packages for comprehensive testing
-          install.packages(c(
-            # Core dependencies
-            'netmeta', 'meta', 'mvmeta', 'pcnetmeta', 'gemtc',
-            # Visualization
-            'ggplot2', 'plotly', 'visNetwork', 'networkD3', 'gganimate',
-            'pheatmap', 'RColorBrewer', 'viridis',
-            # Shiny and dashboards
-            'shiny', 'shinydashboard', 'bs4Dash', 'DT', 'shinycssloaders',
-            # Async processing
-            'future', 'promises',
-            # Machine Learning
-            'randomForest', 'gbm', 'cluster', 'dbscan', 'solitude',
-            # Database
-            'RSQLite', 'DBI',
-            # Reporting and documents
-            'rmarkdown', 'knitr', 'officer', 'flextable', 'flexdashboard',
-            'DiagrammeR', 'htmlwidgets',
-            # AI integration
-            'httr', 'jsonlite',
-            # Data manipulation
-            'dplyr', 'tidyr', 'readr', 'stringr',
-            # Testing
-            'testthat', 'covr'
-          ))
-        shell: Rscript {0}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools, any::rcmdcheck, any::sessioninfo
+          needs: check
 
       - name: Session info
         run: |

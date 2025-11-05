@@ -41,28 +41,11 @@ jobs:
       - name: Setup Pandoc
         uses: r-lib/actions/setup-pandoc@v2
 
-      - name: Install system dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libcurl4-openssl-dev \
-            libssl-dev \
-            libxml2-dev \
-            libfontconfig1-dev \
-            libharfbuzz-dev \
-            libfribidi-dev \
-            libfreetype6-dev \
-            libpng-dev \
-            libtiff5-dev \
-            libjpeg-dev \
-            libsqlite3-dev
-
       - name: Install dependencies
-        run: |
-          install.packages(c('remotes', 'devtools', 'roxygen2', 'pkgbuild'))
-          remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools, any::roxygen2, any::pkgbuild
+          needs: check
 
       - name: Document package
         run: devtools::document()

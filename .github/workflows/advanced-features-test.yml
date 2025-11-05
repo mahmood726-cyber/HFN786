@@ -35,47 +35,9 @@ jobs:
           use-public-rspm: true
 
       - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libcurl4-openssl-dev \
-            libssl-dev \
-            libxml2-dev \
-            libfontconfig1-dev \
-            libharfbuzz-dev \
-            libfribidi-dev \
-            libfreetype6-dev \
-            libpng-dev \
-            libtiff5-dev \
-            libjpeg-dev \
-            libgit2-dev \
-            libsqlite3-dev \
-            pandoc \
-            pandoc-citeproc \
-            texlive-latex-base \
-            texlive-latex-extra \
-            texlive-fonts-recommended
-
-      - name: Install R dependencies
-        run: |
-          install.packages('remotes')
-          remotes::install_deps(dependencies = TRUE, upgrade = "always")
-
-          # Install all advanced feature dependencies
-          install.packages(c(
-            'devtools', 'testthat', 'covr',
-            'netmeta', 'meta', 'mvmeta',
-            'randomForest', 'gbm', 'cluster', 'dbscan', 'solitude',
-            'RSQLite', 'DBI',
-            'shiny', 'bs4Dash', 'visNetwork', 'DT', 'shinycssloaders',
-            'future', 'promises',
-            'rmarkdown', 'knitr', 'officer', 'flextable', 'flexdashboard',
-            'DiagrammeR', 'networkD3', 'gganimate', 'pheatmap',
-            'plotly', 'ggplot2', 'viridis', 'RColorBrewer',
-            'httr', 'jsonlite',
-            'dplyr', 'tidyr', 'readr', 'stringr'
-          ))
-        shell: Rscript {0}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          needs: check
 
       - name: Install package
         run: devtools::install(upgrade = "never")
