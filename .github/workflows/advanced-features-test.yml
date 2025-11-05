@@ -37,6 +37,7 @@ jobs:
       - name: Install system dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          dependencies: '"hard"'
           needs: check
 
       - name: Install package

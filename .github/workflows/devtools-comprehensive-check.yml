@@ -46,6 +46,7 @@ jobs:
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::devtools, any::rcmdcheck, any::sessioninfo
+          dependencies: '"hard"'
           needs: check
 
       - name: Session info
