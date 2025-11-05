@@ -141,6 +141,19 @@ export(print.cnma_results_permutation_db)
 export(print.cnma_generated_results)
 export(print.cnma_complete_manuscript)
 
+# Shiny dashboards and interactive applications
+export(launch_cnma_dashboard)
+export(launch_quick_analysis)
+export(launch_visualization_explorer)
+export(launch_realtime_monitor)
+
+# Advanced automation and batch processing
+export(run_batch_nma)
+export(run_automated_pipeline)
+export(schedule_analysis)
+export(print.cnma_batch_results)
+export(print.cnma_pipeline_results)
+
 # Package imports
 import(dplyr)
 import(ggplot2)

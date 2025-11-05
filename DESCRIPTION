@@ -1,7 +1,7 @@
 Package: cnma
 Type: Package
 Title: Comprehensive Network Meta-Analysis with AI and Advanced Methods
-Version: 1.3.0
+Version: 1.4.0
 Authors@R: c(
     person("CNMA Development Team", role = c("aut", "cre"),
            email = "dev@example.com")
@@ -52,7 +52,10 @@ Suggests:
     rjags (>= 4-10),
     survival (>= 3.0.0),
     jsonlite (>= 1.7.0),
-    reshape2 (>= 1.4.0)
+    reshape2 (>= 1.4.0),
+    shiny (>= 1.7.0),
+    shinydashboard (>= 0.7.0),
+    DT (>= 0.20)
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
