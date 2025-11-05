@@ -2,28 +2,63 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![R](https://img.shields.io/badge/R-%E2%89%A5%204.0.0-blue.svg)](https://www.r-project.org/)
+[![Version](https://img.shields.io/badge/Version-1.1.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
+[![PRISMA-NMA](https://img.shields.io/badge/PRISMA--NMA-Compliant-brightgreen.svg)](https://www.prisma-statement.org/nma)
 
-A comprehensive toolkit for conducting network meta-analysis with both frequentist and Bayesian approaches. CNMA provides extensive features for systematic reviews and meta-analyses in healthcare and other research fields.
+A **publication-ready**, journal-quality toolkit for conducting network meta-analysis following **PRISMA-NMA guidelines** and best practices from leading statistics journals (*Statistics in Medicine*, *Research Synthesis Methods*, *BMJ*, *Journal of Clinical Epidemiology*).
+
+## ⭐ What's New in Version 1.1.0
+
+**Journal-Ready Features** based on statistics literature:
+- ✅ **Treatment Rankings**: P-scores and SUCRA (Rücker & Schwarzer, 2015)
+- ✅ **Inconsistency Assessment**: Global, local (node-splitting), and design-based (Dias et al., 2010; Krahn et al., 2013)
+- ✅ **Prediction Intervals**: Account for heterogeneity (IntHout et al., 2016)
+- ✅ **League Tables**: Standard BMJ/Lancet format
+- ✅ **PRISMA-NMA Compliance**: Automated reporting (Hutton et al., 2015)
+- ✅ **Publication-Quality Visualizations**: Network plots, forest plots, ranking plots, funnel plots, net heat plots
+- ✅ **Sensitivity Analyses**: Leave-one-out, publication bias, model comparison
+- ✅ **Transitivity Assessment**: Evaluate similarity assumption
 
 ## Features
 
-### Core Functionality
-- **Frequentist Network Meta-Analysis**: Based on the proven `netmeta` package
-- **Bayesian Analysis**: Support for MCMC-based Bayesian NMA (planned)
+### 🎯 Core Functionality
+- **Frequentist Network Meta-Analysis**: Based on the proven `netmeta` package (Rücker et al.)
 - **Automatic Reference Selection**: Intelligently selects the most common treatment as reference
+- **Comprehensive Validation**: Input validation, data cleaning, and quality checks
 - **Parallel Processing**: Built-in support for multi-core processing with `future` framework
 
-### Advanced Capabilities (Planned)
-- **Transportability Analysis**: Weight studies based on similarity to target population
-- **GRADE Quality Weighting**: Incorporate evidence quality into analysis
-- **Risk of Bias (RoB2) Assessment**: Weight studies by bias risk
-- **Meta-Regression**: Explore treatment effect modifiers with spline support
-- **Extensive Diagnostics**:
-  - Leave-one-out analysis
-  - Leave-one-treatment-out analysis
-  - Node-splitting for inconsistency detection
-  - Publication bias assessment (PET-PEESE, trim-and-fill, selection models)
-- **Interactive Visualizations**: Network plots, forest plots, and rankings
+### 📊 Treatment Ranking & Comparison
+- **P-scores/SUCRA**: Treatment rankings without resampling (frequentist analogue)
+- **League Tables**: Pairwise comparison tables in publication format
+- **Prediction Intervals**: Future study effect estimates accounting for heterogeneity
+- **Ranking Plots**: Rankograms and cumulative ranking curves
+
+### 🔍 Inconsistency Assessment
+- **Global Heterogeneity**: Cochran's Q, I², Tau² statistics
+- **Local Inconsistency**: Node-splitting analysis (netsplit)
+- **Design-by-Treatment**: Design-based decomposition of inconsistency
+- **Contribution Matrix**: Study contributions to network estimates
+- **Net Heat Plot**: Visual identification of inconsistency hotspots
+
+### ✅ PRISMA-NMA Compliance
+- **Automated Reporting**: Generate PRISMA-NMA compliance reports
+- **Network Characteristics**: Comprehensive network summaries
+- **Transitivity Assessment**: Evaluate similarity of studies across comparisons
+- **All Required Elements**: Ensures publication readiness
+
+### 📈 Publication-Quality Visualizations
+- **Network Plot**: Treatment network with study counts
+- **Forest Plot**: Effect estimates with prediction intervals
+- **Ranking Plots**: Treatment ranking probabilities
+- **Funnel Plot**: Comparison-adjusted publication bias assessment
+- **Net Heat Plot**: Inconsistency visualization
+- **Batch Export**: Generate all plots in PNG/PDF format
+
+### 🔬 Sensitivity & Bias Assessment
+- **Leave-One-Out Analysis**: Identify influential studies
+- **Publication Bias**: Visual and statistical assessment
+- **Model Comparison**: Fixed vs random effects evaluation
+- **Heterogeneity Exploration**: Subgroup and meta-regression (future)
 
 ## Installation
 
@@ -56,7 +91,7 @@ library(cnma)
 # Generate simulated data for demonstration
 data <- simulate_cnma_data(n_studies = 30, seed = 123)
 
-# Configure analysis (using basic settings)
+# Configure analysis
 config <- setup_cnma(
   sm = "HR",                    # Hazard ratio
   use_bayesian = FALSE,         # Use frequentist approach
@@ -73,6 +108,51 @@ results <- run_cnma_analysis(
 # View results
 print(results)
 summary(results)
+```
+
+### Journal-Ready Workflow (NEW in v1.1.0)
+
+```r
+library(cnma)
+
+# 1. Prepare data
+data <- simulate_cnma_data(40, seed = 123)
+data <- cnma_clean_data(data)
+
+# 2. Run analysis
+config <- setup_cnma(sm = "HR", use_bayesian = FALSE)
+results <- run_cnma_analysis(data, ref_treatment = "Placebo", config = config)
+nma <- results$results$main_nma
+
+# 3. Treatment rankings (P-scores)
+rankings <- calculate_rankings(nma)
+print(rankings)
+
+# 4. League table (pairwise comparisons)
+league <- create_league_table(nma, digits = 2)
+print(league)
+
+# 5. Prediction intervals
+pred_int <- calculate_prediction_intervals(nma)
+print(pred_int)
+
+# 6. Assess inconsistency
+inconsistency <- assess_inconsistency(nma, methods = c("global", "local", "design"))
+print(inconsistency)
+
+# 7. Transitivity assessment
+transitivity <- assess_transitivity(data, variables = c("age_mean", "female_pct"))
+print(transitivity)
+
+# 8. Generate all publication plots
+create_publication_plots(nma, output_dir = "figures", reference = "Placebo")
+
+# 9. Sensitivity analyses
+loo <- leave_one_out_analysis(data, config)
+pub_bias <- assess_publication_bias(nma)
+
+# 10. PRISMA-NMA compliance report
+prisma_report <- generate_prisma_report(results, "markdown", "prisma_report.md")
 ```
 
 ### One-Line Quick Start

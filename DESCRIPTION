@@ -1,16 +1,20 @@
 Package: cnma
 Type: Package
-Title: Comprehensive Network Meta-Analysis
-Version: 1.0.0
+Title: Comprehensive Network Meta-Analysis with PRISMA-NMA Compliance
+Version: 1.1.0
 Authors@R: c(
     person("CNMA Development Team", role = c("aut", "cre"),
            email = "dev@example.com")
     )
-Description: A comprehensive toolkit for conducting network meta-analysis with both
-    frequentist and Bayesian approaches. Features include transportability analysis,
-    GRADE quality weighting, risk of bias (RoB2) assessment, meta-regression, parallel
-    processing support, and extensive diagnostic capabilities. Designed for researchers
-    conducting systematic reviews and meta-analyses in healthcare and other fields.
+Description: A comprehensive, journal-ready toolkit for conducting network meta-analysis
+    following PRISMA-NMA guidelines and best practices from Statistics in Medicine,
+    Research Synthesis Methods, and BMJ. Features include frequentist network meta-analysis,
+    treatment ranking (P-scores/SUCRA), inconsistency assessment (global, local, and
+    design-based), prediction intervals, league tables, publication bias assessment,
+    sensitivity analyses, transitivity evaluation, and publication-quality visualizations.
+    Implements methods from Rücker & Schwarzer (2015), Dias et al. (2010), Krahn et al. (2013),
+    and Hutton et al. (2015). Designed for researchers conducting systematic reviews and
+    meta-analyses in healthcare and other fields.
 License: Apache License 2.0
 URL: https://github.com/mahmood726-cyber/HFN786
 BugReports: https://github.com/mahmood726-cyber/HFN786/issues

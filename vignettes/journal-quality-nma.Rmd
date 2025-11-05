@@ -1,0 +1,425 @@
+---
+title: "Publication-Ready Network Meta-Analysis with CNMA"
+author: "CNMA Development Team"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Publication-Ready Network Meta-Analysis with CNMA}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 6
+)
+```
+
+## Introduction
+
+This vignette demonstrates how to conduct a publication-ready network meta-analysis (NMA) using the **cnma** package, following best practices from leading statistics journals including:
+
+- *Statistics in Medicine*
+- *Research Synthesis Methods*
+- *BMJ*
+- *Journal of Clinical Epidemiology*
+
+The analysis follows **PRISMA-NMA** reporting guidelines (Hutton et al., 2015) and implements methods from recent methodological papers.
+
+## Load Package
+
+```{r load-package, eval=FALSE}
+library(cnma)
+library(dplyr)
+library(ggplot2)
+```
+
+## Example Dataset
+
+We'll use simulated data representing a network of treatments for a clinical condition. In practice, you would load your own systematic review data.
+
+```{r simulate-data, eval=FALSE}
+# Generate simulated data with 40 studies
+set.seed(123)
+data <- simulate_cnma_data(n_studies = 40, seed = 123)
+
+# Examine data structure
+head(data)
+dim(data)
+
+# Check included treatments
+unique(c(data$treat1, data$treat2))
+```
+
+## Step 1: Data Validation and Cleaning
+
+Always validate your data before analysis:
+
+```{r validate-data, eval=FALSE}
+# Clean data (removes invalid rows)
+data_clean <- cnma_clean_data(data)
+
+# Validate structure and values
+validate_cnma_input(data_clean)
+
+# Network characteristics
+network_summary <- network_characteristics_summary(data_clean)
+print(network_summary)
+```
+
+## Step 2: Configure Analysis
+
+Configure analysis parameters following your research question:
+
+```{r configure, eval=FALSE}
+config <- setup_cnma(
+  sm = "HR",                    # Hazard ratio
+  use_bayesian = FALSE,         # Frequentist approach
+  run_metareg = FALSE,          # No meta-regression
+  export_plots = FALSE,         # Don't save plots
+  report_html = FALSE,          # Generate report separately
+  seed = 123                    # Reproducibility
+)
+
+print(config)
+```
+
+## Step 3: Run Main Analysis
+
+```{r main-analysis, eval=FALSE}
+# Run network meta-analysis
+results <- run_cnma_analysis(
+  data = data_clean,
+  ref_treatment = "Placebo",    # Specify reference
+  config = config
+)
+
+# View results
+print(results)
+summary(results)
+
+# Access underlying netmeta object
+nma <- results$results$main_nma
+```
+
+## Step 4: Assess Key Assumptions
+
+### 4.1 Transitivity Assessment
+
+Evaluate whether studies are similar enough across comparisons:
+
+```{r transitivity, eval=FALSE}
+# Assess transitivity by comparing study characteristics
+transitivity <- assess_transitivity(
+  data = data_clean,
+  variables = c("age_mean", "female_pct", "bmi_mean", "year"),
+  by_comparison = TRUE
+)
+
+print(transitivity)
+```
+
+**Interpretation**: Large differences in study characteristics across comparisons may indicate violation of the transitivity assumption.
+
+### 4.2 Inconsistency Assessment
+
+Comprehensive evaluation of network consistency:
+
+```{r inconsistency, eval=FALSE}
+# Multiple methods for inconsistency assessment
+inconsistency <- assess_inconsistency(
+  nma,
+  methods = c("global", "local", "design")
+)
+
+print(inconsistency)
+```
+
+**Key metrics:**
+
+- **Global**: Overall heterogeneity/inconsistency (Cochran's Q, I², Tau²)
+- **Local**: Node-splitting to identify specific inconsistent comparisons
+- **Design**: Design-by-treatment interaction test
+
+## Step 5: Treatment Rankings
+
+Calculate treatment rankings using P-scores (frequentist analogue of SUCRA):
+
+```{r rankings, eval=FALSE}
+# Calculate P-scores
+rankings <- calculate_rankings(
+  nma,
+  small_values = "undesirable"  # Smaller effects are worse (e.g., for HRs)
+)
+
+print(rankings)
+```
+
+**P-score interpretation:**
+- 1.0 = Certainly the best treatment
+- 0.5 = Average performance
+- 0.0 = Certainly the worst treatment
+
+## Step 6: Pairwise Comparisons (League Table)
+
+Generate a league table showing all pairwise treatment comparisons:
+
+```{r league-table, eval=FALSE}
+# Create league table
+league <- create_league_table(nma, digits = 2)
+print(league)
+```
+
+This format is standard in *BMJ*, *Lancet*, and *JAMA* for presenting NMA results.
+
+## Step 7: Prediction Intervals
+
+Calculate prediction intervals accounting for heterogeneity:
+
+```{r prediction-intervals, eval=FALSE}
+# Prediction intervals
+pred_intervals <- calculate_prediction_intervals(nma, level = 0.95)
+print(pred_intervals)
+```
+
+**Interpretation**: Prediction intervals show the expected range of true effects in *future studies*, wider than confidence intervals due to between-study heterogeneity.
+
+Reference: IntHout et al. (2016), *BMJ Open*
+
+## Step 8: Publication-Quality Visualizations
+
+### 8.1 Network Plot
+
+```{r network-plot, eval=FALSE}
+# Network geometry
+plot_network(nma)
+```
+
+### 8.2 Forest Plot with Prediction Intervals
+
+```{r forest-plot, eval=FALSE}
+# Forest plot comparing all treatments to reference
+plot_forest(
+  nma,
+  reference = "Placebo",
+  prediction_interval = TRUE,
+  sortvar = TRUE
+)
+```
+
+### 8.3 Treatment Ranking Plots
+
+```{r ranking-plots, eval=FALSE}
+# Rankogram
+plot_rankings(nma, type = "rankogram")
+
+# Cumulative ranking plot
+plot_rankings(nma, type = "cumulative")
+```
+
+### 8.4 Funnel Plot for Publication Bias
+
+```{r funnel-plot, eval=FALSE}
+# Comparison-adjusted funnel plot
+plot_funnel(nma)
+```
+
+### 8.5 Net Heat Plot for Inconsistency
+
+```{r netheat-plot, eval=FALSE}
+# Net heat plot (if sufficient network structure)
+plot_netheat(nma)
+```
+
+### 8.6 Generate All Plots Automatically
+
+```{r all-plots, eval=FALSE}
+# Create all publication plots and save to directory
+create_publication_plots(
+  nma,
+  output_dir = "nma_figures",
+  reference = "Placebo",
+  device = "both",  # PNG and PDF
+  width = 10,
+  height = 8
+)
+```
+
+## Step 9: Sensitivity Analyses
+
+### 9.1 Leave-One-Out Analysis
+
+```{r leave-one-out, eval=FALSE}
+# Identify influential studies
+loo_results <- leave_one_out_analysis(
+  data = data_clean,
+  config = config,
+  progress = TRUE
+)
+
+print(loo_results)
+```
+
+**Interpretation**: Studies with >10% change in Tau are considered influential.
+
+### 9.2 Publication Bias Assessment
+
+```{r pub-bias, eval=FALSE}
+# Comprehensive publication bias assessment
+pub_bias <- assess_publication_bias(
+  nma,
+  methods = c("visual", "comparison", "egger")
+)
+
+print(pub_bias)
+```
+
+### 9.3 Model Comparison
+
+```{r model-comparison, eval=FALSE}
+# Compare fixed vs random effects models
+model_comp <- compare_models(data_clean, config)
+print(model_comp)
+```
+
+## Step 10: PRISMA-NMA Compliance Report
+
+Generate a comprehensive report for your manuscript:
+
+```{r prisma-report, eval=FALSE}
+# Generate PRISMA-NMA compliance report
+prisma_report <- generate_prisma_report(
+  results,
+  output_format = "markdown",
+  file = "prisma_nma_report.md"
+)
+
+# View in console
+cat(prisma_report)
+```
+
+## Complete Workflow Example
+
+Here's a complete analysis workflow in one script:
+
+```{r complete-workflow, eval=FALSE}
+library(cnma)
+
+# 1. Data preparation
+data <- simulate_cnma_data(40, seed = 123)
+data_clean <- cnma_clean_data(data)
+validate_cnma_input(data_clean)
+
+# 2. Network characteristics
+network_summary <- network_characteristics_summary(data_clean)
+print(network_summary)
+
+# 3. Configure and run analysis
+config <- setup_cnma(sm = "HR", use_bayesian = FALSE, seed = 123)
+results <- run_cnma_analysis(data_clean, ref_treatment = "Placebo", config = config)
+nma <- results$results$main_nma
+
+# 4. Assess assumptions
+transitivity <- assess_transitivity(data_clean,
+                                   variables = c("age_mean", "female_pct"))
+inconsistency <- assess_inconsistency(nma, methods = c("global", "local", "design"))
+
+# 5. Treatment rankings
+rankings <- calculate_rankings(nma)
+print(rankings)
+
+# 6. Pairwise comparisons
+league <- create_league_table(nma)
+print(league)
+
+# 7. Prediction intervals
+pred_int <- calculate_prediction_intervals(nma)
+print(pred_int)
+
+# 8. Visualizations
+create_publication_plots(nma, output_dir = "figures", reference = "Placebo")
+
+# 9. Sensitivity analyses
+loo <- leave_one_out_analysis(data_clean, config)
+pub_bias <- assess_publication_bias(nma)
+model_comp <- compare_models(data_clean, config)
+
+# 10. PRISMA-NMA report
+prisma_report <- generate_prisma_report(results, "markdown", "prisma_report.md")
+
+cat("\n✓ Analysis complete! All outputs ready for publication.\n")
+```
+
+## Reporting Checklist
+
+When writing your manuscript, ensure you include:
+
+### Required Elements (PRISMA-NMA)
+
+- [ ] Network diagram (use `plot_network()`)
+- [ ] Description of network geometry
+- [ ] Transitivity assessment (use `assess_transitivity()`)
+- [ ] Inconsistency evaluation (use `assess_inconsistency()`)
+- [ ] Forest plot with prediction intervals (use `plot_forest()`)
+- [ ] League table (use `create_league_table()`)
+- [ ] Treatment rankings (use `calculate_rankings()`)
+- [ ] Funnel plot for publication bias (use `plot_funnel()`)
+- [ ] Sensitivity analyses (use `leave_one_out_analysis()`)
+- [ ] GRADE assessment of evidence quality
+
+### Recommended Statistical Details
+
+- Heterogeneity estimates (Tau², I²)
+- Between-study variance
+- Model assumptions and violations
+- Software and version used
+- Analysis reproducibility (seed, code availability)
+
+## Key References
+
+1. **PRISMA-NMA Guidelines**:
+   Hutton B, et al. (2015). The PRISMA extension statement for reporting of systematic reviews incorporating network meta-analyses. *Annals of Internal Medicine*, 162(11):777-84.
+
+2. **P-scores and Rankings**:
+   Rücker G, Schwarzer G (2015). Ranking treatments in frequentist network meta-analysis works without resampling methods. *BMC Medical Research Methodology*, 15:58.
+
+3. **Inconsistency Assessment**:
+   Dias S, et al. (2010). Checking consistency in mixed treatment comparison meta-analysis. *Statistics in Medicine*, 29(7-8):932-44.
+
+4. **Net Heat Plot**:
+   Krahn U, et al. (2013). A graphical tool for locating inconsistency in network meta-analyses. *BMC Medical Research Methodology*, 13:35.
+
+5. **Prediction Intervals**:
+   IntHout J, et al. (2016). Plea for routinely presenting prediction intervals in meta-analysis. *BMJ Open*, 6(7):e010247.
+
+6. **Publication Bias in NMA**:
+   Chaimani A, Salanti G (2012). Using network meta-analysis to evaluate the existence of small-study effects. *Research Synthesis Methods*, 3(2):161-76.
+
+## Session Info
+
+Always report your session information for reproducibility:
+
+```{r session-info, eval=FALSE}
+sessionInfo()
+```
+
+## Conclusion
+
+The **cnma** package provides a comprehensive, journal-ready toolkit for network meta-analysis that:
+
+- ✓ Follows PRISMA-NMA reporting guidelines
+- ✓ Implements state-of-the-art statistical methods
+- ✓ Generates publication-quality visualizations
+- ✓ Provides comprehensive sensitivity analyses
+- ✓ Ensures reproducible research
+
+For more information, visit: <https://github.com/mahmood726-cyber/HFN786>
+
+---
+
+**Citation**: When using cnma in your research, please cite:
+
+CNMA Development Team (2025). cnma: Comprehensive Network Meta-Analysis with PRISMA-NMA Compliance. R package version 1.1.0. https://github.com/mahmood726-cyber/HFN786

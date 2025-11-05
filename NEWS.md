@@ -1,3 +1,82 @@
+# cnma 1.1.0
+
+## Major Journal-Quality Enhancements
+
+This release transforms cnma into a **publication-ready** toolkit aligned with best practices from leading statistics journals and PRISMA-NMA guidelines.
+
+### New Features Based on Statistics Literature
+
+#### Treatment Ranking & Comparison
+* **`calculate_rankings()`** - P-scores and SUCRA for treatment ranking (Rücker & Schwarzer, 2015)
+* **`create_league_table()`** - Standard BMJ/Lancet format pairwise comparisons
+* **`calculate_prediction_intervals()`** - Prediction intervals accounting for heterogeneity (IntHout et al., 2016)
+
+#### Inconsistency Assessment
+* **`assess_inconsistency()`** - Comprehensive inconsistency evaluation with three methods:
+  - Global: Cochran's Q, I², Tau²
+  - Local: Node-splitting analysis (Dias et al., 2010)
+  - Design: Design-by-treatment interaction (Krahn et al., 2013)
+* **`calculate_contribution_matrix()`** - Study contributions to network estimates
+* **`assess_transitivity()`** - Evaluate similarity of studies across comparisons
+
+#### Publication-Quality Visualizations
+* **`plot_network()`** - Network plot with study contributions
+* **`plot_forest()`** - Forest plot with prediction intervals
+* **`plot_rankings()`** - Rankograms and cumulative ranking plots
+* **`plot_funnel()`** - Comparison-adjusted funnel plot (Chaimani & Salanti, 2012)
+* **`plot_netheat()`** - Net heat plot for inconsistency visualization
+* **`create_publication_plots()`** - Batch generate all plots in PNG/PDF
+
+#### PRISMA-NMA Compliance
+* **`generate_prisma_report()`** - Automated PRISMA-NMA compliance reporting (Hutton et al., 2015)
+* **`network_characteristics_summary()`** - Comprehensive network summaries
+* Support for all PRISMA-NMA extension items (S1-S5)
+
+#### Sensitivity Analysis Framework
+* **`leave_one_out_analysis()`** - Identify influential studies
+* **`assess_publication_bias()`** - Publication bias assessment with multiple methods
+* **`compare_models()`** - Fixed vs random effects model comparison
+
+### Documentation Improvements
+* Added comprehensive vignette: "Publication-Ready Network Meta-Analysis with CNMA"
+* Step-by-step journal-quality workflow examples
+* References to key methodological papers
+* PRISMA-NMA checklist and reporting guidance
+
+### Enhanced S3 Methods
+* `print.cnma_ranking()` - Format treatment rankings
+* `print.cnma_league_table()` - Format league tables
+* `print.cnma_prediction_intervals()` - Format prediction intervals
+* `print.cnma_inconsistency()` - Format inconsistency results
+* `print.cnma_transitivity()` - Format transitivity assessment
+* `print.cnma_loo()` - Format leave-one-out results
+* `print.cnma_pub_bias()` - Format publication bias assessment
+* `print.cnma_model_comparison()` - Format model comparison
+* `print.cnma_network_summary()` - Format network characteristics
+
+### Implementation of Best Practices
+* Methods from *Statistics in Medicine* (Rücker & Schwarzer, 2015; Dias et al., 2010)
+* Methods from *BMC Medical Research Methodology* (Krahn et al., 2013)
+* Methods from *Annals of Internal Medicine* (Hutton et al., 2015)
+* Methods from *Research Synthesis Methods* (Chaimani & Salanti, 2012)
+* Methods from *BMJ Open* (IntHout et al., 2016)
+
+### Package Metadata
+* Updated DESCRIPTION to version 1.1.0
+* Added PRISMA-NMA compliance badge
+* Enhanced package description with methodology references
+* Updated NAMESPACE with 30+ new exported functions
+
+## Bug Fixes
+* None (feature release)
+
+## Internal Changes
+* Added 5 new R source files (ranking.R, inconsistency.R, visualization.R, prisma.R, sensitivity.R)
+* Enhanced modular code organization
+* Added comprehensive roxygen2 documentation for all new functions
+
+---
+
 # cnma 1.0.0
 
 ## Major Changes
