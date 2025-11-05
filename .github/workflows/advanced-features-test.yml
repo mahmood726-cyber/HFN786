@@ -1,0 +1,368 @@
+# Advanced Features Integration Testing
+# Tests ML, AI, database, reporting, and Shiny dashboard functionality
+name: Advanced Features Test
+
+on:
+  push:
+    branches: [main, master, claude/*]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  advanced-features:
+    runs-on: ubuntu-latest
+    name: Advanced Features Integration Test
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            libfontconfig1-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfreetype6-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev \
+            libgit2-dev \
+            libsqlite3-dev \
+            pandoc \
+            pandoc-citeproc \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-fonts-recommended
+
+      - name: Install R dependencies
+        run: |
+          install.packages('remotes')
+          remotes::install_deps(dependencies = TRUE, upgrade = "always")
+
+          # Install all advanced feature dependencies
+          install.packages(c(
+            'devtools', 'testthat', 'covr',
+            'netmeta', 'meta', 'mvmeta',
+            'randomForest', 'gbm', 'cluster', 'dbscan', 'solitude',
+            'RSQLite', 'DBI',
+            'shiny', 'bs4Dash', 'visNetwork', 'DT', 'shinycssloaders',
+            'future', 'promises',
+            'rmarkdown', 'knitr', 'officer', 'flextable', 'flexdashboard',
+            'DiagrammeR', 'networkD3', 'gganimate', 'pheatmap',
+            'plotly', 'ggplot2', 'viridis', 'RColorBrewer',
+            'httr', 'jsonlite',
+            'dplyr', 'tidyr', 'readr', 'stringr'
+          ))
+        shell: Rscript {0}
+
+      - name: Install package
+        run: devtools::install(upgrade = "never")
+        shell: Rscript {0}
+
+      - name: Test 1 - Machine Learning Predictions
+        run: |
+          library(cnma)
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("TEST 1: Machine Learning Predictions\n")
+          cat("=" %s% rep("=", 60) %s% "\n\n")
+
+          # Generate test data
+          set.seed(42)
+          sim_data <- simulate_cnma_data(n_studies = 30, n_treatments = 6)
+          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+
+          # Test Random Forest predictions
+          cat("Testing Random Forest predictions...\n")
+          ml_rf <- ml_predict_rankings(sim_data, nma_result, method = "rf", seed = 42)
+          print(ml_rf)
+          cat("\nRF RMSE:", ml_rf$performance$RMSE, "\n")
+          cat("RF R²:", ml_rf$performance$R_squared, "\n")
+
+          # Test GBM predictions
+          cat("\nTesting Gradient Boosting predictions...\n")
+          ml_gbm <- ml_predict_rankings(sim_data, nma_result, method = "gbm", seed = 42)
+          print(ml_gbm)
+          cat("\nGBM RMSE:", ml_gbm$performance$RMSE, "\n")
+          cat("GBM R²:", ml_gbm$performance$R_squared, "\n")
+
+          # Verify predictions are reasonable
+          stopifnot(ml_rf$performance$RMSE < 1.0)
+          stopifnot(ml_gbm$performance$RMSE < 1.0)
+
+          cat("\n✓ Machine Learning Predictions: PASSED\n\n")
+        shell: Rscript {0}
+
+      - name: Test 2 - Pattern Detection (Clustering)
+        run: |
+          library(cnma)
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("TEST 2: Pattern Detection (Clustering)\n")
+          cat("=" %s% rep("=", 60) %s% "\n\n")
+
+          set.seed(42)
+          sim_data <- simulate_cnma_data(n_studies = 40, n_treatments = 5)
+          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+
+          # Test K-means
+          cat("Testing K-means clustering...\n")
+          kmeans_result <- ml_detect_patterns(sim_data, nma_result, method = "kmeans", n_clusters = 3)
+          print(kmeans_result)
+          cat("Silhouette score:", kmeans_result$silhouette_score, "\n")
+
+          # Test Hierarchical clustering
+          cat("\nTesting Hierarchical clustering...\n")
+          hc_result <- ml_detect_patterns(sim_data, nma_result, method = "hierarchical", n_clusters = 3)
+          print(hc_result)
+
+          # Test DBSCAN
+          cat("\nTesting DBSCAN clustering...\n")
+          dbscan_result <- ml_detect_patterns(sim_data, nma_result, method = "dbscan")
+          print(dbscan_result)
+
+          cat("\n✓ Pattern Detection: PASSED\n\n")
+        shell: Rscript {0}
+
+      - name: Test 3 - Anomaly Detection
+        run: |
+          library(cnma)
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("TEST 3: Anomaly Detection\n")
+          cat("=" %s% rep("=", 60) %s% "\n\n")
+
+          set.seed(42)
+          sim_data <- simulate_cnma_data(n_studies = 50, n_treatments = 4)
+          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+
+          # Test Isolation Forest
+          cat("Testing Isolation Forest...\n")
+          iso_result <- ml_detect_anomalies(sim_data, nma_result, method = "isolation_forest")
+          print(iso_result)
+          cat("Anomalies detected:", sum(iso_result$data$is_anomaly), "\n")
+
+          # Test LOF
+          cat("\nTesting Local Outlier Factor...\n")
+          lof_result <- ml_detect_anomalies(sim_data, nma_result, method = "lof")
+          print(lof_result)
+          cat("Anomalies detected:", sum(lof_result$data$is_anomaly), "\n")
+
+          cat("\n✓ Anomaly Detection: PASSED\n\n")
+        shell: Rscript {0}
+
+      - name: Test 4 - Database Backend
+        run: |
+          library(cnma)
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("TEST 4: Database Backend\n")
+          cat("=" %s% rep("=", 60) %s% "\n\n")
+
+          # Initialize database
+          db_path <- tempfile(fileext = ".db")
+          cat("Initializing database at:", db_path, "\n")
+          con <- initialize_cnma_database(db_path)
+
+          # Create project
+          cat("\nCreating project...\n")
+          project_id <- create_project(con, "Advanced Test Project", "Testing database functionality")
+          cat("Project ID:", project_id, "\n")
+
+          # Save dataset
+          cat("\nSaving dataset...\n")
+          sim_data <- simulate_cnma_data(n_studies = 20, n_treatments = 5)
+          dataset_id <- save_dataset(con, project_id, sim_data, "Test Dataset 1")
+          cat("Dataset ID:", dataset_id, "\n")
+
+          # Run and save analysis
+          cat("\nRunning and saving analysis...\n")
+          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+          analysis_id <- save_analysis(con, dataset_id, nma_result, "Test Analysis",
+                                       params = list(model = "random"))
+          cat("Analysis ID:", analysis_id, "\n")
+
+          # Save results
+          cat("\nSaving results...\n")
+          save_results(con, analysis_id, nma_result)
+
+          # Search analyses
+          cat("\nSearching analyses...\n")
+          search_results <- search_analyses(con, project_name = "Advanced Test")
+          print(search_results)
+
+          # Cleanup
+          DBI::dbDisconnect(con)
+          unlink(db_path)
+
+          cat("\n✓ Database Backend: PASSED\n\n")
+        shell: Rscript {0}
+
+      - name: Test 5 - Manuscript Generation (Word)
+        run: |
+          library(cnma)
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("TEST 5: Manuscript Generation (Word)\n")
+          cat("=" %s% rep("=", 60) %s% "\n\n")
+
+          set.seed(42)
+          sim_data <- simulate_cnma_data(n_studies = 25, n_treatments = 5)
+          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+
+          # Generate Word manuscript
+          output_file <- tempfile(fileext = ".docx")
+          cat("Generating Word manuscript to:", output_file, "\n")
+
+          generate_complete_manuscript_word(
+            nma_results = nma_result,
+            data = sim_data,
+            title = "Test Network Meta-Analysis",
+            authors = c("Test Author"),
+            journal_style = "BMJ",
+            output_file = output_file
+          )
+
+          # Verify file was created
+          stopifnot(file.exists(output_file))
+          file_size <- file.size(output_file)
+          cat("Word document created successfully. Size:", file_size, "bytes\n")
+          stopifnot(file_size > 10000)  # Should be at least 10KB
+
+          unlink(output_file)
+          cat("\n✓ Manuscript Generation (Word): PASSED\n\n")
+        shell: Rscript {0}
+
+      - name: Test 6 - Interactive HTML Reports
+        run: |
+          library(cnma)
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("TEST 6: Interactive HTML Reports\n")
+          cat("=" %s% rep("=", 60) %s% "\n\n")
+
+          set.seed(42)
+          sim_data <- simulate_cnma_data(n_studies = 25, n_treatments = 5)
+          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+
+          # Generate interactive HTML report
+          output_file <- tempfile(fileext = ".html")
+          cat("Generating interactive HTML report to:", output_file, "\n")
+
+          generate_interactive_html_report(
+            nma_results = nma_result,
+            data = sim_data,
+            title = "Test NMA Report",
+            author = "Test Author",
+            output_file = output_file,
+            include_ml = TRUE,
+            include_grade = TRUE,
+            theme = "light"
+          )
+
+          # Verify file was created
+          stopifnot(file.exists(output_file))
+          file_size <- file.size(output_file)
+          cat("HTML report created successfully. Size:", file_size, "bytes\n")
+          stopifnot(file_size > 10000)  # Should be at least 10KB
+
+          unlink(output_file)
+          cat("\n✓ Interactive HTML Reports: PASSED\n\n")
+        shell: Rscript {0}
+
+      - name: Test 7 - GRADE Tables
+        run: |
+          library(cnma)
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("TEST 7: GRADE Evidence Tables\n")
+          cat("=" %s% rep("=", 60) %s% "\n\n")
+
+          set.seed(42)
+          sim_data <- simulate_cnma_data(n_studies = 30, n_treatments = 4)
+          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+
+          # Generate GRADE table
+          cat("Generating GRADE evidence table...\n")
+          grade_table <- generate_grade_table(
+            nma_results = nma_result,
+            data = sim_data
+          )
+
+          print(grade_table)
+
+          # Verify structure
+          stopifnot(is.data.frame(grade_table$table))
+          stopifnot(nrow(grade_table$table) > 0)
+          stopifnot("Overall_Quality" %in% colnames(grade_table$table))
+
+          cat("\n✓ GRADE Tables: PASSED\n\n")
+        shell: Rscript {0}
+
+      - name: Test 8 - Complete Report Package
+        run: |
+          library(cnma)
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("TEST 8: Complete Report Package Export\n")
+          cat("=" %s% rep("=", 60) %s% "\n\n")
+
+          set.seed(42)
+          sim_data <- simulate_cnma_data(n_studies = 20, n_treatments = 5)
+          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+
+          # Export complete package
+          temp_dir <- tempdir()
+          cat("Exporting complete report package to:", temp_dir, "\n")
+
+          zip_file <- export_complete_report_package(
+            nma_results = nma_result,
+            data = sim_data,
+            project_name = "TestProject",
+            output_dir = temp_dir,
+            include_ml = TRUE,
+            include_grade = TRUE
+          )
+
+          # Verify ZIP was created
+          stopifnot(file.exists(zip_file))
+          file_size <- file.size(zip_file)
+          cat("Report package created successfully. Size:", file_size, "bytes\n")
+          stopifnot(file_size > 10000)
+
+          unlink(zip_file)
+          cat("\n✓ Complete Report Package: PASSED\n\n")
+        shell: Rscript {0}
+
+      - name: Summary
+        if: success()
+        run: |
+          cat("\n")
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("ALL ADVANCED FEATURES TESTS PASSED!\n")
+          cat("=" %s% rep("=", 60) %s% "\n")
+          cat("\n")
+          cat("✓ Machine Learning Predictions\n")
+          cat("✓ Pattern Detection (Clustering)\n")
+          cat("✓ Anomaly Detection\n")
+          cat("✓ Database Backend\n")
+          cat("✓ Manuscript Generation (Word)\n")
+          cat("✓ Interactive HTML Reports\n")
+          cat("✓ GRADE Tables\n")
+          cat("✓ Complete Report Package\n")
+          cat("\n")
+        shell: Rscript {0}

@@ -1,0 +1,231 @@
+# Package Build and Release Workflow
+# Builds, validates, and releases the CNMA package
+name: Package Build and Release
+
+on:
+  push:
+    branches: [main, master, claude/*]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.config.os }}
+    name: Build on ${{ matrix.config.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: ubuntu-latest, r: 'release', artifact: 'linux'}
+          - {os: macos-latest, r: 'release', artifact: 'macos'}
+          - {os: windows-latest, r: 'release', artifact: 'windows'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
+
+      - name: Setup Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            libfontconfig1-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfreetype6-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev \
+            libsqlite3-dev
+
+      - name: Install dependencies
+        run: |
+          install.packages(c('remotes', 'devtools', 'roxygen2', 'pkgbuild'))
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Document package
+        run: devtools::document()
+        shell: Rscript {0}
+
+      - name: Build source package
+        if: runner.os == 'Linux'
+        run: |
+          pkg <- devtools::build(path = ".")
+          cat("Built package:", pkg, "\n")
+          cat("PACKAGE_FILE=", pkg, "\n", file = Sys.getenv("GITHUB_ENV"), append = TRUE, sep = "")
+        shell: Rscript {0}
+
+      - name: Build binary package
+        run: |
+          pkg <- pkgbuild::build(binary = TRUE, dest_path = ".")
+          cat("Built binary:", pkg, "\n")
+          cat("BINARY_FILE=", pkg, "\n", file = Sys.getenv("GITHUB_ENV"), append = TRUE, sep = "")
+        shell: Rscript {0}
+
+      - name: Verify installation
+        run: |
+          install.packages(list.files(pattern = "\\.tar\\.gz$|_.*\\.zip$|_.*\\.tgz$")[1], repos = NULL)
+          library(cnma)
+          cat("Package version:", as.character(packageVersion("cnma")), "\n")
+          cat("Functions exported:", length(ls("package:cnma")), "\n")
+        shell: Rscript {0}
+
+      - name: Quick functionality test
+        run: |
+          library(cnma)
+          # Quick smoke test
+          sim_data <- simulate_cnma_data(n_studies = 10, n_treatments = 4)
+          nma <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+          cat("✓ Basic functionality verified\n")
+        shell: Rscript {0}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cnma-${{ matrix.config.artifact }}
+          path: |
+            *.tar.gz
+            *.zip
+            *.tgz
+          retention-days: 30
+
+  validate:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Validate Package
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+
+      - name: Install dependencies
+        run: |
+          install.packages(c('devtools', 'goodpractice', 'lintr', 'spelling'))
+        shell: Rscript {0}
+
+      - name: Check package structure
+        run: |
+          cat("Checking package structure...\n")
+          stopifnot(file.exists("DESCRIPTION"))
+          stopifnot(file.exists("NAMESPACE"))
+          stopifnot(dir.exists("R"))
+          stopifnot(dir.exists("tests"))
+          cat("✓ Package structure OK\n")
+        shell: Rscript {0}
+
+      - name: Lint package code
+        run: |
+          cat("Linting package code...\n")
+          lints <- lintr::lint_package()
+          print(lints)
+          if (length(lints) > 100) {
+            warning("Package has ", length(lints), " lint issues")
+          }
+        shell: Rscript {0}
+        continue-on-error: true
+
+      - name: Check spelling
+        run: |
+          cat("Checking spelling...\n")
+          spelling <- spelling::spell_check_package()
+          print(spelling)
+        shell: Rscript {0}
+        continue-on-error: true
+
+      - name: Count functions
+        run: |
+          cat("Counting exported functions...\n")
+          namespace <- readLines("NAMESPACE")
+          exports <- grep("^export\\(", namespace, value = TRUE)
+          cat("Total exports:", length(exports), "\n")
+          cat("Expected: ~198 functions\n")
+
+          r_files <- list.files("R", pattern = "\\.R$", full.names = TRUE)
+          cat("R source files:", length(r_files), "\n")
+
+          total_lines <- sum(sapply(r_files, function(f) length(readLines(f))))
+          cat("Total lines of R code:", total_lines, "\n")
+        shell: Rscript {0}
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build, validate]
+    runs-on: ubuntu-latest
+    name: Create Release
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Display structure
+        run: ls -R artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/**/*.tar.gz
+            artifacts/**/*.zip
+            artifacts/**/*.tgz
+          body: |
+            # CNMA Package Release ${{ github.ref_name }}
+
+            This release includes:
+            - 198+ exported functions
+            - Machine Learning integration (RF, GBM, clustering, anomaly detection)
+            - Complete manuscript generation (Word, PDF, HTML)
+            - SQLite database backend
+            - Interactive Shiny dashboards with bs4Dash
+            - Advanced visualizations and reporting
+            - GRADE evidence assessment
+            - AI-powered content generation
+
+            ## Installation
+
+            ```r
+            # Install from GitHub
+            remotes::install_github("mahmood726-cyber/HFN786@${{ github.ref_name }}")
+            ```
+
+            ## What's New
+
+            See [CHANGELOG.md](CHANGELOG.md) for detailed changes.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
