@@ -193,6 +193,11 @@ export(close_database)
 export(get_database_summary)
 export(print.cnma_db_summary)
 
+# Interactive HTML reports
+export(generate_interactive_html_report)
+export(generate_interactive_dashboard_html)
+export(export_complete_report_package)
+
 # Package imports
 import(dplyr)
 import(ggplot2)

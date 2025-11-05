@@ -1,27 +1,29 @@
 Package: cnma
 Type: Package
 Title: Comprehensive Network Meta-Analysis with AI and Advanced Methods
-Version: 1.6.0
+Version: 1.7.0
 Authors@R: c(
     person("CNMA Development Team", role = c("aut", "cre"),
            email = "dev@example.com")
     )
 Description: A revolutionary, journal-ready toolkit for network meta-analysis with
     cutting-edge methods (2024-2025), machine learning predictions, complete manuscript
-    generation, and database backend. Includes component NMA, population adjustment
-    (MAIC/STC/ML-NMR), Bayesian hierarchical models, RMST-based NMA, local AI (LLama 3),
-    1,635 validation rules, 10,000+ scenarios, professional bs4Dash dashboards, machine
-    learning for treatment ranking prediction and pattern detection, complete manuscript
-    generation to Word/PDF, GRADE evidence profiles, PRISMA flow diagrams, Sankey
-    diagrams, animated visualizations, ROB2 plots, 3D surface plots, and SQLite database
-    for analysis storage. Features frequentist and Bayesian NMA, P-scores/SUCRA rankings,
+    generation, database backend, and interactive HTML reports. Includes component NMA,
+    population adjustment (MAIC/STC/ML-NMR), Bayesian hierarchical models, RMST-based NMA,
+    local AI (LLama 3), 1,635 validation rules, 10,000+ scenarios, professional bs4Dash
+    dashboards, machine learning for treatment ranking prediction and pattern detection,
+    complete manuscript generation to Word/PDF, interactive HTML reports with all
+    visualizations, GRADE evidence profiles, PRISMA flow diagrams, Sankey diagrams,
+    animated visualizations, ROB2 plots, 3D surface plots, and SQLite database for
+    analysis storage. Features frequentist and Bayesian NMA, P-scores/SUCRA rankings,
     inconsistency assessment, prediction intervals, league tables, publication bias
     assessment, leave-one-out sensitivity, net splitting, transitivity evaluation,
-    interactive visualizations (visNetwork, plotly), meta-regression, and automated
-    reporting. Implements methods from Rücker & Schwarzer (2015), Dias et al. (2010),
-    Krahn et al. (2013), Hutton et al. (2015), Ades et al. (2024), Veroniki et al.
-    (2024), and Hua et al. (2025). Inspired by mahmood789/786-MIII-Meta-analysis.
-    Designed for systematic reviews and meta-analyses in healthcare and other fields.
+    interactive visualizations (visNetwork, plotly), meta-regression, automated reporting,
+    and complete report packages. Implements methods from Rücker & Schwarzer (2015),
+    Dias et al. (2010), Krahn et al. (2013), Hutton et al. (2015), Ades et al. (2024),
+    Veroniki et al. (2024), and Hua et al. (2025). Inspired by mahmood789/786-MIII-
+    Meta-analysis. Designed for systematic reviews and meta-analyses in healthcare and
+    other fields.
 License: Apache License 2.0
 URL: https://github.com/mahmood726-cyber/HFN786
 BugReports: https://github.com/mahmood726-cyber/HFN786/issues
@@ -74,7 +76,8 @@ Suggests:
     gganimate (>= 1.0.0),
     pheatmap (>= 1.0.0),
     RSQLite (>= 2.2.0),
-    DBI (>= 1.1.0)
+    DBI (>= 1.1.0),
+    flexdashboard (>= 0.5.0)
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true

@@ -2,15 +2,133 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![R](https://img.shields.io/badge/R-%E2%89%A5%204.0.0-blue.svg)](https://www.r-project.org/)
-[![Version](https://img.shields.io/badge/Version-1.6.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
+[![Version](https://img.shields.io/badge/Version-1.7.0-green.svg)](https://github.com/mahmood726-cyber/HFN786)
 [![PRISMA-NMA](https://img.shields.io/badge/PRISMA--NMA-Compliant-brightgreen.svg)](https://www.prisma-statement.org/nma)
 [![AI-Powered](https://img.shields.io/badge/AI-LLama%203-orange.svg)](https://ollama.com/)
 [![Machine Learning](https://img.shields.io/badge/ML-Predictions-red.svg)]()
 [![Manuscript](https://img.shields.io/badge/Manuscript-Word%2FPDF-purple.svg)]()
 [![Database](https://img.shields.io/badge/Database-SQLite-blue.svg)]()
 [![GRADE](https://img.shields.io/badge/GRADE-Tables-green.svg)]()
+[![HTML Reports](https://img.shields.io/badge/Reports-Interactive%20HTML-brightgreen.svg)]()
 
-A **revolutionary**, AI-powered toolkit with **machine learning predictions**, **complete manuscript generation**, and **database backend**. Features **treatment ranking prediction**, **pattern detection**, **anomaly detection**, **Word/PDF manuscript generation**, **GRADE evidence profiles**, **PRISMA flow diagrams**, **Sankey diagrams**, **animated visualizations**, **3D plots**, **SQLite database**, **bs4Dash dashboards**, **1,635 validation rules**, **20,000+ text permutations**, and **complete automation**.
+A **revolutionary**, AI-powered toolkit with **interactive HTML reports**, **machine learning predictions**, **complete manuscript generation**, and **database backend**. Features **comprehensive interactive reports**, **treatment ranking prediction**, **pattern detection**, **anomaly detection**, **Word/PDF manuscripts**, **GRADE evidence profiles**, **PRISMA flow diagrams**, **Sankey diagrams**, **animated visualizations**, **3D plots**, **SQLite database**, **bs4Dash dashboards**, **1,635 validation rules**, **20,000+ text permutations**, and **complete automation**.
+
+## 🚀 What's New in Version 1.7.0
+
+### 📊 Comprehensive Interactive HTML Reports
+
+**Generate Complete Interactive Reports:**
+```r
+# Create a professional interactive HTML report with everything
+report <- generate_interactive_html_report(
+  nma_results, data,
+  title = "My Network Meta-Analysis",
+  author = "Research Team",
+  output_file = "nma_report.html",
+  include_ml = TRUE,        # Include ML predictions
+  include_grade = TRUE,     # Include GRADE tables
+  theme = "light",          # or "dark", "blue", "green"
+  toc_float = TRUE          # Floating table of contents
+)
+
+# Opens in browser - beautifully formatted with all results!
+```
+
+**What's Included:**
+- ✅ **Executive Summary** with key findings and network characteristics
+- ✅ **Interactive Visualizations** (network plot, forest plot, rankings, net heat, funnel, contribution)
+- ✅ **Results Tables** (treatment rankings, league table, study characteristics)
+- ✅ **Statistical Assessment** (heterogeneity, inconsistency with interpretations)
+- ✅ **Machine Learning Results** (model performance, variable importance) - optional
+- ✅ **GRADE Evidence Profile** - optional
+- ✅ **Methods Section** with complete documentation
+- ✅ **References** to key methodology papers
+- ✅ **Professional Styling** with multiple themes
+- ✅ **Floating Table of Contents** for easy navigation
+- ✅ **Collapsible Sections** for better organization
+- ✅ **Code Folding** to hide/show R code
+- ✅ **Paged Data Tables** with search and filtering
+
+**Interactive Dashboard HTML:**
+```r
+# Generate an interactive dashboard with plotly plots
+generate_interactive_dashboard_html(
+  nma_results, data,
+  output_file = "dashboard.html"
+)
+
+# Interactive plotly charts, DT datatables, tabs
+```
+
+**Complete Report Package (ZIP):**
+```r
+# Export everything as a complete package
+zip_file <- export_complete_report_package(
+  nma_results, data,
+  project_name = "Antidepressants_NMA",
+  output_dir = "reports"
+)
+
+# Creates ZIP with:
+# - Interactive HTML report
+# - All figures (PNG, high resolution)
+# - All tables (CSV format)
+# - Original data and NMA results (RDS)
+# - README with instructions
+```
+
+**Features:**
+- **Professional Styling**: Multiple themes (light, dark, blue, green)
+- **R Markdown Powered**: Reproducible and customizable
+- **Complete Documentation**: All analyses documented
+- **Self-Contained**: Single HTML file with embedded images
+- **Print-Ready**: Can be printed or saved as PDF from browser
+- **Share-Friendly**: Email or host on web
+- **No Dependencies**: Opens in any browser
+
+### 📦 New Dependencies (1 package)
+
+- `flexdashboard` (>= 0.5.0) - Interactive dashboards (optional)
+
+### 🎯 Complete Reporting Workflow
+
+```r
+library(cnma)
+
+# 1. Run your analysis
+data <- simulate_cnma_data(50)
+nma <- run_comprehensive_nma(data)
+
+# 2. Generate interactive HTML report
+generate_interactive_html_report(
+  nma$results$main_nma, data,
+  title = "Complete NMA Report",
+  include_ml = TRUE,
+  include_grade = TRUE,
+  output_file = "report.html"
+)
+
+# 3. Generate Word manuscript
+generate_complete_manuscript_word(
+  nma$results$main_nma, data,
+  title = "My Study",
+  authors = c("Smith JA", "Jones BC"),
+  journal_style = "BMJ",
+  output_file = "manuscript.docx"
+)
+
+# 4. Export complete package
+export_complete_report_package(
+  nma$results$main_nma, data,
+  project_name = "MyNMA",
+  output_dir = "deliverables"
+)
+
+# Now you have:
+# ✓ Interactive HTML report for exploration
+# ✓ Word manuscript ready for submission
+# ✓ Complete ZIP package with all assets
+```
 
 ## 🚀 What's New in Version 1.6.0
 
