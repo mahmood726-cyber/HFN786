@@ -6,6 +6,7 @@ export(cnma_parallel_off)
 export(cnma_parallel_on)
 export(cnma_quickstart)
 export(run_cnma_analysis)
+export(run_comprehensive_nma)
 export(setup_cnma)
 export(simulate_cnma_data)
 export(validate_cnma_input)
@@ -13,7 +14,9 @@ export(validate_cnma_input)
 # S3 methods
 export(print.cnma)
 export(print.cnma_config)
+export(print.cnma_comprehensive)
 export(summary.cnma)
+export(summary.cnma_comprehensive)
 
 # Treatment ranking functions
 export(calculate_rankings)
