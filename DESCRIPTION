@@ -1,0 +1,46 @@
+Package: cnma
+Type: Package
+Title: Comprehensive Network Meta-Analysis
+Version: 1.0.0
+Authors@R: c(
+    person("Mahmood", "Developer", email = "mahmood726.cyber@example.com", role = c("aut", "cre"))
+    )
+Description: A comprehensive toolkit for conducting network meta-analysis with both
+    frequentist and Bayesian approaches. Includes transportability analysis,
+    GRADE weighting, bias assessment, extensive diagnostics, machine learning
+    integration, and advanced reporting capabilities.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 3.6.0)
+Imports:
+    netmeta (>= 2.0.0),
+    ggplot2 (>= 3.3.0),
+    dplyr (>= 1.0.0),
+    tidyr (>= 1.1.0),
+    purrr (>= 0.3.0),
+    tibble (>= 3.0.0),
+    stats,
+    utils,
+    grDevices,
+    graphics
+Suggests:
+    digest,
+    future,
+    future.apply,
+    devtools,
+    roxygen2,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    pkgbuild,
+    goodpractice,
+    lintr,
+    spelling
+RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
+URL: https://github.com/mahmood726-cyber/HFN786
+BugReports: https://github.com/mahmood726-cyber/HFN786/issues
+Language: en-US
