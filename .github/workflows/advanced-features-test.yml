@@ -56,8 +56,22 @@ jobs:
           tryCatch({
             library(cnma)
             cat("Testing data simulation...\n")
-            sim_data <- simulate_cnma_data(n_studies = 10, n_treatments = 4)
+            sim_data <- simulate_cnma_data(n_studies = 10)
             cat("✓ Data simulation works\n")
+
+            cat("\nTesting configuration...\n")
+            config <- setup_cnma(use_bayesian = FALSE, export_plots = FALSE)
+            cat("✓ Configuration works\n")
+
+            cat("\nTesting validation...\n")
+            validate_cnma_input(sim_data)
+            cat("✓ Validation works\n")
+
+            cat("\nTesting analysis...\n")
+            results <- run_cnma_analysis(sim_data, config = config)
+            cat("✓ Analysis works\n")
+
+            cat("\n✓ All core functionality tests passed\n")
           }, error = function(e) {
             cat("Test failed:", conditionMessage(e), "\n")
           })

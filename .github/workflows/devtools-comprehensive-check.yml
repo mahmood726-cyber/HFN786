@@ -61,7 +61,7 @@ jobs:
           devtools::check(
             document = TRUE,
             args = c('--no-manual', '--no-tests'),
-            error_on = "never",
+            error_on = "note",
             check_dir = "check"
           )
         shell: Rscript {0}
@@ -89,54 +89,71 @@ jobs:
 
           # Test data simulation
           cat("Testing data simulation...\n")
-          sim_data <- simulate_cnma_data(n_studies = 10, n_treatments = 4)
+          sim_data <- simulate_cnma_data(n_studies = 10)
           print(str(sim_data))
+
+          # Test configuration
+          cat("\nTesting configuration...\n")
+          config <- setup_cnma(use_bayesian = FALSE, export_plots = FALSE)
+          print(config)
+
+          # Test analysis
+          cat("\nTesting analysis...\n")
+          results <- run_cnma_analysis(sim_data, config = config)
+          print(results)
 
           cat("\nCore functionality tests passed!\n")
         shell: Rscript {0}
         continue-on-error: true
 
-      - name: Test ML functionality
+      - name: Test validation functionality
         run: |
           library(cnma)
 
-          cat("Testing Machine Learning features...\n")
-          sim_data <- simulate_cnma_data(n_studies = 20, n_treatments = 5)
-          nma_result <- run_cnma(sim_data, "TE", "seTE", "treat1", "treat2", "studlab")
+          cat("Testing data validation...\n")
+          sim_data <- simulate_cnma_data(n_studies = 20)
 
-          # Test ML predictions
-          cat("\nTesting ML predictions...\n")
-          ml_pred <- ml_predict_rankings(sim_data, nma_result, method = "rf")
-          print(ml_pred)
+          # Test validation
+          validate_cnma_input(sim_data)
+          cat("Validation passed!\n")
 
-          # Test pattern detection
-          cat("\nTesting pattern detection...\n")
-          patterns <- ml_detect_patterns(sim_data, nma_result, method = "kmeans", n_clusters = 3)
-          print(patterns)
+          # Test cleaning
+          cat("\nTesting data cleaning...\n")
+          clean_data <- cnma_clean_data(sim_data)
+          cat("Cleaning passed!\n")
 
-          cat("\nML functionality tests passed!\n")
+          # Test parallel functions
+          cat("\nTesting parallel processing...\n")
+          cnma_parallel_on("sequential")
+          cnma_parallel_off()
+          cat("Parallel functions passed!\n")
+
+          cat("\nValidation functionality tests passed!\n")
         shell: Rscript {0}
         continue-on-error: true
 
-      - name: Test database functionality
+      - name: Test S3 methods
         run: |
           library(cnma)
 
-          cat("Testing database backend...\n")
-          db_path <- tempfile(fileext = ".db")
-          con <- initialize_cnma_database(db_path)
+          cat("Testing S3 methods...\n")
+          sim_data <- simulate_cnma_data(n_studies = 10)
+          config <- setup_cnma(use_bayesian = FALSE, export_plots = FALSE)
 
-          # Test project creation
-          project_id <- create_project(con, "Test Project", "Test description")
-          cat("Created project ID:", project_id, "\n")
+          # Test print method for config
+          cat("\nTesting print.cnma_config...\n")
+          print(config)
 
-          # Test dataset storage
-          sim_data <- simulate_cnma_data(n_studies = 10, n_treatments = 4)
-          dataset_id <- save_dataset(con, project_id, sim_data, "Test dataset")
-          cat("Saved dataset ID:", dataset_id, "\n")
+          # Test analysis and print
+          cat("\nTesting cnma analysis and print...\n")
+          results <- run_cnma_analysis(sim_data, config = config)
+          print(results)
 
-          DBI::dbDisconnect(con)
-          cat("\nDatabase functionality tests passed!\n")
+          # Test summary
+          cat("\nTesting summary.cnma...\n")
+          summary(results)
+
+          cat("\nS3 methods tests passed!\n")
         shell: Rscript {0}
         continue-on-error: true
 
