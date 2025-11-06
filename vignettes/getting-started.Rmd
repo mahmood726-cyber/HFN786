@@ -1,0 +1,224 @@
+---
+title: "Getting Started with cnma"
+author: "Mahmood Developer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with cnma}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+## Introduction
+
+The **cnma** package provides a comprehensive toolkit for conducting network meta-analysis (NMA) with both frequentist and Bayesian approaches. This vignette will guide you through the basic workflow.
+
+## Installation
+
+```{r, eval = FALSE}
+# Install from GitHub
+remotes::install_github("mahmood726-cyber/HFN786")
+```
+
+## Quick Start
+
+### 1. Load the Package
+
+```{r library}
+library(cnma)
+```
+
+### 2. Generate Example Data
+
+For demonstration purposes, we'll use simulated data:
+
+```{r simulate}
+# Generate network with 30 studies and 5 treatments
+data <- simulate_cnma_data(n_studies = 30, seed = 42)
+
+# Examine the data structure
+head(data)
+```
+
+The data contains:
+- `studlab`: Study identifier
+- `treat1`, `treat2`: Treatment comparison
+- `TE`: Treatment effect (log hazard ratio)
+- `seTE`: Standard error
+- Additional covariates: `age_mean`, `female_pct`, `bmi_mean`, etc.
+
+### 3. Configure Analysis
+
+Create a configuration object with your analysis preferences:
+
+```{r config}
+config <- setup_cnma(
+  sm = "HR",              # Summary measure: Hazard Ratio
+  use_bayesian = FALSE,   # Use frequentist approach
+  use_transport = FALSE,  # Disable transportability for quick demo
+  use_grade_weighting = FALSE,
+  run_metareg = FALSE,
+  export_plots = FALSE,
+  report_html = FALSE
+)
+```
+
+### 4. Run Analysis
+
+```{r analysis, eval = FALSE}
+# Run the main analysis
+results <- run_cnma_analysis(
+  data = data,
+  ref_treatment = "Placebo",
+  config = config
+)
+
+# View results
+print(results)
+summary(results)
+```
+
+## Data Format
+
+Your data must contain these required columns:
+
+- `studlab`: Study identifier (character)
+- `treat1`: First treatment in comparison (character)
+- `treat2`: Second treatment in comparison (character)
+- `TE`: Treatment effect estimate (numeric, log-scale for ratios)
+- `seTE`: Standard error of treatment effect (numeric, > 0)
+
+Optional columns for advanced features:
+
+- `grade`: GRADE quality ("High", "Moderate", "Low", "Very low")
+- `is_rct`: Study design (1 = RCT, 0 = observational)
+- `rob2`: Risk of bias ("low", "some concerns", "high")
+- Covariates: `age_mean`, `female_pct`, `bmi_mean`, `charlson`, etc.
+
+## Network Characteristics
+
+```{r network, eval = FALSE}
+# Number of studies
+n_studies <- length(unique(data$studlab))
+cat("Number of studies:", n_studies, "\n")
+
+# Number of treatments
+treatments <- unique(c(data$treat1, data$treat2))
+cat("Number of treatments:", length(treatments), "\n")
+cat("Treatments:", paste(treatments, collapse = ", "), "\n")
+
+# Number of comparisons
+cat("Number of comparisons:", nrow(data), "\n")
+```
+
+## Configuration Options
+
+The `setup_cnma()` function provides extensive configuration options:
+
+### Summary Measure
+```{r sm-options, eval = FALSE}
+config <- setup_cnma(sm = "OR")  # Odds Ratio
+config <- setup_cnma(sm = "RR")  # Risk Ratio
+config <- setup_cnma(sm = "HR")  # Hazard Ratio
+config <- setup_cnma(sm = "MD")  # Mean Difference
+```
+
+### Analysis Methods
+```{r methods, eval = FALSE}
+# Frequentist only (fast)
+config <- setup_cnma(use_bayesian = FALSE)
+
+# Add Bayesian analysis (slower, requires JAGS)
+config <- setup_cnma(
+  use_bayesian = TRUE,
+  bayes_chains = 3,
+  bayes_iter = 10000
+)
+```
+
+### Advanced Features
+```{r advanced, eval = FALSE}
+# Transportability analysis
+config <- setup_cnma(
+  use_transport = TRUE,
+  transport_metric = "mahalanobis"
+)
+
+# Meta-regression
+config <- setup_cnma(
+  run_metareg = TRUE,
+  metareg_covariates = c("age_mean", "female_pct", "bmi_mean")
+)
+
+# Quality weighting
+config <- setup_cnma(
+  use_grade_weighting = TRUE,
+  use_rob2_weighting = TRUE
+)
+```
+
+## Understanding Results
+
+The results object contains:
+
+- `results$main_nma`: Main network meta-analysis (netmeta object)
+- `results$data`: Input data
+- `config`: Configuration used
+- `ref_treatment`: Reference treatment
+
+### Heterogeneity Statistics
+
+```{r heterogeneity, eval = FALSE}
+# Tau-squared (between-study variance)
+results$results$main_nma$tau
+
+# I-squared (percentage of variation due to heterogeneity)
+results$results$main_nma$I2.random * 100
+```
+
+## Validation
+
+Before running analysis, validate your data:
+
+```{r validation, eval = FALSE}
+# Check for required columns and valid values
+validate_cnma_input(data)
+
+# Clean data (remove invalid rows)
+clean_data <- cnma_clean_data(data)
+```
+
+## Parallel Processing
+
+For large networks, enable parallel processing:
+
+```{r parallel, eval = FALSE}
+# Enable multicore processing
+cnma_parallel_on("multicore", workers = 4)
+
+# Run analysis
+results <- run_cnma_analysis(data, config = config)
+
+# Disable when done
+cnma_parallel_off()
+```
+
+## Next Steps
+
+- See `vignette("advanced-features")` for meta-regression and transportability
+- See `vignette("bayesian-analysis")` for Bayesian methods
+- See `?run_cnma_analysis` for complete function documentation
+
+## References
+
+- Rücker G, Schwarzer G. Ranking treatments in frequentist network meta-analysis works without resampling methods. *BMC Medical Research Methodology* 2015; 15:58.
+- Dias S, Welton NJ, Caldwell DM, Ades AE. Checking consistency in mixed treatment comparison meta-analysis. *Statistics in Medicine* 2010; 29(7-8):932-944.

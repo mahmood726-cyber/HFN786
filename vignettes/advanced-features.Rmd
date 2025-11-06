@@ -1,0 +1,442 @@
+---
+title: "Advanced Features in cnma"
+author: "Mahmood Developer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Advanced Features in cnma}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+## Introduction
+
+This vignette demonstrates advanced features of the **cnma** package, including:
+
+- Transportability analysis
+- GRADE quality weighting
+- Meta-regression
+- Publication bias assessment
+- Leave-one-out analysis
+
+## Setup
+
+```{r library, eval = FALSE}
+library(cnma)
+
+# Generate rich example data
+data <- simulate_cnma_data(n_studies = 40, seed = 123)
+```
+
+## Transportability Analysis
+
+Transportability analysis weights studies by their similarity to a target population.
+
+### Define Target Population
+
+```{r target, eval = FALSE}
+# Define characteristics of your target population
+target_population <- data.frame(
+  age_mean = 68,
+  female_pct = 0.52,
+  bmi_mean = 27.5,
+  charlson = 1.8
+)
+```
+
+### Configure Transportability
+
+```{r transport-config, eval = FALSE}
+config <- setup_cnma(
+  use_transport = TRUE,
+  transport_metric = "mahalanobis",  # Distance metric
+  transport_kernel = "gaussian",      # Weighting kernel
+  transport_truncation = 0.02,        # Truncate extreme weights
+  use_bayesian = FALSE,
+  export_plots = FALSE
+)
+```
+
+### Run Analysis
+
+```{r transport-run, eval = FALSE}
+results <- run_cnma_analysis(
+  data = data,
+  target_population = target_population,
+  config = config
+)
+```
+
+### Distance Metrics
+
+Available metrics:
+- `"mahalanobis"`: Accounts for correlations between covariates (recommended)
+- `"euclidean"`: Simple Euclidean distance
+
+### Kernel Functions
+
+Available kernels:
+- `"gaussian"`: Smooth decay of weights
+- `"tricube"`: Sharper cutoff for distant studies
+
+## GRADE Quality Weighting
+
+Weight studies by evidence quality using GRADE assessments.
+
+```{r grade, eval = FALSE}
+# Ensure your data has a 'grade' column
+table(data$grade)
+
+config <- setup_cnma(
+  use_grade_weighting = TRUE,
+  use_bayesian = FALSE,
+  export_plots = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+Quality weights (default):
+- High: 1.0
+- Moderate: 0.75
+- Low: 0.5
+- Very low: 0.25
+
+## Risk of Bias (RoB2) Weighting
+
+```{r rob2, eval = FALSE}
+# Ensure your data has a 'rob2' column
+table(data$rob2)
+
+config <- setup_cnma(
+  use_rob2_weighting = TRUE,
+  rob2_var = "rob2",
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+Bias weights (default):
+- Low risk: 1.0
+- Some concerns: 0.75
+- High risk: 0.5
+
+## Study Design Weighting
+
+```{r design, eval = FALSE}
+config <- setup_cnma(
+  use_design_weighting = TRUE,
+  design_var = "is_rct",
+  design_weight_map = c(`1` = 1.0, `0` = 0.6),  # RCT vs observational
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+## Meta-Regression
+
+Investigate effect modifiers with meta-regression.
+
+### Basic Meta-Regression
+
+```{r metareg, eval = FALSE}
+config <- setup_cnma(
+  run_metareg = TRUE,
+  metareg_covariates = c("age_mean", "female_pct", "bmi_mean"),
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+### Spline Transformations
+
+For non-linear relationships:
+
+```{r spline, eval = FALSE}
+config <- setup_cnma(
+  run_metareg = TRUE,
+  metareg_covariates = c("age_mean", "female_pct", "bmi_mean"),
+  metareg_spline_covars = c("age_mean", "bmi_mean"),
+  metareg_spline_df = 3,
+  metareg_spline_cv = TRUE,  # Cross-validation for df selection
+  metareg_cv_folds = 5,
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+### Cluster-Robust Variance
+
+For studies with shared characteristics:
+
+```{r cr2, eval = FALSE}
+config <- setup_cnma(
+  run_metareg = TRUE,
+  metareg_covariates = c("age_mean"),
+  metareg_cr2 = TRUE,  # CR2 variance correction
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+## Publication Bias Assessment
+
+### Enable Publication Bias Tests
+
+```{r pub-bias, eval = FALSE}
+config <- setup_cnma(
+  enable_egger = TRUE,        # Network-level Egger test
+  run_trimfill = TRUE,        # Trim-and-fill analysis
+  run_selection_models = TRUE,
+  run_copas = TRUE,
+  pet_peese_min_k = 10,       # Minimum studies for PET-PEESE
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+## Leave-One-Out Analysis
+
+Assess robustness by removing studies one at a time.
+
+```{r loo, eval = FALSE}
+config <- setup_cnma(
+  run_loo = TRUE,              # Leave-one-out
+  run_loto = TRUE,             # Leave-one-treatment-out
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+## Inconsistency Assessment
+
+### Node-Splitting
+
+```{r nodesplit, eval = FALSE}
+config <- setup_cnma(
+  nodesplit_min_k = 10,
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+### UME Inconsistency Model
+
+```{r ume, eval = FALSE}
+config <- setup_cnma(
+  enable_ume = TRUE,
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+### Net Heat Plot
+
+```{r netheat, eval = FALSE}
+config <- setup_cnma(
+  run_netheat = TRUE,
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+## Bayesian Analysis
+
+For more complex models and probabilistic inference:
+
+```{r bayesian, eval = FALSE}
+config <- setup_cnma(
+  use_bayesian = TRUE,
+  bayes_link = "identity",
+  bayes_likelihood = "normal",
+  bayes_chains = 3,
+  bayes_iter = 10000,
+  bayes_warmup = 5000,
+  bayes_nodesplit = TRUE
+)
+
+# Note: Requires JAGS installation
+results <- run_cnma_analysis(data, config = config)
+```
+
+### Bayesian Meta-Regression
+
+```{r bayes-metareg, eval = FALSE}
+config <- setup_cnma(
+  use_bayesian = TRUE,
+  bayes_metareg_covariates = c("age_mean", "female_pct"),
+  bayes_chains = 3,
+  bayes_iter = 10000
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+## SUCRA Analysis
+
+Surface Under the Cumulative Ranking curve.
+
+### Basic SUCRA
+
+```{r sucra, eval = FALSE}
+# SUCRA is calculated automatically with main analysis
+# Access via results$results$main_nma
+```
+
+### Bootstrap SUCRA
+
+For uncertainty quantification:
+
+```{r sucra-boot, eval = FALSE}
+config <- setup_cnma(
+  sucra_boot = TRUE,
+  sucra_boot_iter = 300,
+  use_bayesian = FALSE
+)
+
+results <- run_cnma_analysis(data, config = config)
+```
+
+## Combining Features
+
+You can combine multiple advanced features:
+
+```{r combined, eval = FALSE}
+# Comprehensive analysis
+config <- setup_cnma(
+  # Weighting
+  use_transport = TRUE,
+  use_grade_weighting = TRUE,
+  use_rob2_weighting = TRUE,
+
+  # Meta-regression
+  run_metareg = TRUE,
+  metareg_covariates = c("age_mean", "female_pct", "bmi_mean"),
+  metareg_spline_covars = c("age_mean"),
+
+  # Diagnostics
+  run_loo = TRUE,
+  run_loto = TRUE,
+  enable_egger = TRUE,
+  run_netheat = TRUE,
+
+  # Output
+  export_plots = TRUE,
+  plot_dir = "comprehensive_plots",
+  report_html = TRUE,
+
+  # Performance
+  parallel_strategy = "multicore",
+  n_cores = 4,
+
+  use_bayesian = FALSE
+)
+
+target <- data.frame(
+  age_mean = 65,
+  female_pct = 0.5,
+  bmi_mean = 28,
+  charlson = 1.5
+)
+
+results <- run_cnma_analysis(
+  data = data,
+  target_population = target,
+  config = config
+)
+```
+
+## Exporting Results
+
+### Save Plots
+
+```{r export-plots, eval = FALSE}
+config <- setup_cnma(
+  export_plots = TRUE,
+  plot_dir = "my_nma_plots"
+)
+```
+
+### Generate HTML Report
+
+```{r html-report, eval = FALSE}
+config <- setup_cnma(
+  report_html = TRUE,
+  report_file = "nma_report.html"
+)
+```
+
+### Write Manifest
+
+```{r manifest, eval = FALSE}
+config <- setup_cnma(
+  write_manifest = TRUE
+)
+```
+
+## Performance Optimization
+
+### Parallel Processing
+
+```{r parallel, eval = FALSE}
+config <- setup_cnma(
+  parallel_strategy = "multicore",
+  n_cores = 4
+)
+
+# Or enable manually
+cnma_parallel_on("multicore", workers = 4)
+results <- run_cnma_analysis(data, config = config)
+cnma_parallel_off()
+```
+
+### Caching
+
+```{r cache, eval = FALSE}
+config <- setup_cnma(
+  enable_cache = TRUE
+)
+```
+
+### Logging
+
+```{r logging, eval = FALSE}
+config <- setup_cnma(
+  log_to_file = TRUE,
+  log_file = "cnma_analysis.log"
+)
+```
+
+## Tips and Best Practices
+
+1. **Transportability**: Use when applying results to a different population
+2. **GRADE Weighting**: Use when you have quality assessments for all studies
+3. **Meta-regression**: Pre-specify covariates; beware of overfitting
+4. **Publication Bias**: Only meaningful with sufficient studies (>10)
+5. **Bayesian Analysis**: Provides probabilistic statements; requires JAGS
+6. **Parallel Processing**: Benefits diminish with small networks (<20 studies)
+
+## References
+
+- Guyatt GH et al. GRADE guidelines. *Journal of Clinical Epidemiology* 2011.
+- Sterne JAC et al. RoB 2: a revised tool for assessing risk of bias in randomised trials. *BMJ* 2019.
+- Dias S et al. Network meta-analysis for decision-making. Wiley, 2018.
