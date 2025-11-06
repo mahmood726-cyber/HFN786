@@ -27,6 +27,8 @@ NULL
 
 #' Initialize CNMA Environment
 #' @keywords internal
+#' @noRd
+#' @noRd
 .onLoad <- function(libname, pkgname) {
   .cnma_env$cache <- new.env(parent = emptyenv())
   .cnma_env$parallel_enabled <- FALSE
@@ -34,6 +36,8 @@ NULL
 
 #' Clean up CNMA Environment
 #' @keywords internal
+#' @noRd
+#' @noRd
 .onUnload <- function(libpath) {
   if (exists("parallel_enabled", envir = .cnma_env)) {
     if (.cnma_env$parallel_enabled && requireNamespace("future", quietly = TRUE)) {
@@ -49,6 +53,8 @@ NULL
 #' @param b Alternative value if a is NULL
 #' @return a if not NULL, otherwise b
 #' @keywords internal
+#' @noRd
+#' @noRd
 `%||%` <- function(a, b) if (!is.null(a)) a else b
 
 #' Safe value clipping
@@ -57,6 +63,8 @@ NULL
 #' @param hi Upper bound
 #' @return Clipped values
 #' @keywords internal
+#' @noRd
+#' @noRd
 safe_clip <- function(x, lo, hi) pmin(hi, pmax(lo, x))
 
 #' Replace NA with value
@@ -64,6 +72,7 @@ safe_clip <- function(x, lo, hi) pmin(hi, pmax(lo, x))
 #' @param val Replacement value
 #' @return Vector with NAs replaced
 #' @keywords internal
+#' @noRd
 vcoalesce <- function(x, val = 0) { 
   x[is.na(x)] <- val
   x 
@@ -73,11 +82,13 @@ vcoalesce <- function(x, val = 0) {
 #' @param p Package name
 #' @return Logical
 #' @keywords internal
+#' @noRd
 has_pkg <- function(p) requireNamespace(p, quietly = TRUE)
 
 #' Print message with timestamp
 #' @param ... Message components
 #' @keywords internal
+#' @noRd
 msg <- function(...) {
   if (!getOption("cnma.quiet", FALSE)) {
     cat(sprintf("[%s] ", format(Sys.time(), "%H:%M:%S")), 
@@ -88,6 +99,7 @@ msg <- function(...) {
 #' Check if running on CRAN
 #' @return Logical
 #' @keywords internal
+#' @noRd
 is_cran <- function() {
   !identical(Sys.getenv("NOT_CRAN"), "true") &&
     (nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_")) ||
@@ -97,6 +109,7 @@ is_cran <- function() {
 #' Check if JAGS is available
 #' @return Logical
 #' @keywords internal
+#' @noRd
 has_jags <- function() {
   if (is_cran()) return(FALSE)
   out1 <- suppressWarnings(Sys.which("jags"))
@@ -108,6 +121,7 @@ has_jags <- function() {
 #' @param msg0 Error message
 #' @param hint Optional hint
 #' @keywords internal
+#' @noRd
 .stop_hint <- function(msg0, hint = NULL) {
   if (!is.null(hint)) msg0 <- paste0(msg0, "\nHint: ", hint)
   stop(msg0, call. = FALSE)
@@ -119,6 +133,7 @@ has_jags <- function() {
 #' @param silent Silent mode
 #' @return Result or try-error
 #' @keywords internal
+#' @noRd
 .safe_try <- function(expr, context = "", silent = TRUE) {
   out <- try(expr, silent = silent)
   if (inherits(out, "try-error")) {
@@ -135,6 +150,7 @@ has_jags <- function() {
 #' @param ... Additional parameters
 #' @return Cache key string
 #' @keywords internal
+#' @noRd
 cache_key <- function(tag, ...) {
   if (!has_pkg("digest")) return(paste(tag, sample(1e9, 1)))
   digest::digest(list(tag = tag, ...), algo = "xxhash64")
@@ -146,6 +162,7 @@ cache_key <- function(tag, ...) {
 #' @param enable_cache Enable caching
 #' @return Cached or computed result
 #' @keywords internal
+#' @noRd
 memoize <- function(key, expr, enable_cache = FALSE) {
   if (!enable_cache) return(eval.parent(substitute(expr)))
   
@@ -208,6 +225,7 @@ cnma_parallel_off <- function() {
 #' @param FUN Function to apply
 #' @return List of results
 #' @keywords internal
+#' @noRd
 .papply <- function(x, FUN) {
   if (.cnma_env$parallel_enabled && has_pkg("future.apply")) {
     future.apply <- getNamespace("future.apply")
@@ -593,7 +611,7 @@ run_cnma_analysis <- function(data,
   if (!inherits(results$main_nma, "try-error")) {
     cat(sprintf("\nMain NMA completed:\n"))
     cat(sprintf("  Tau: %.4f\n", results$main_nma$tau))
-    cat(sprintf("  I²: %.1f%%\n", results$main_nma$I2.random * 100))
+    cat(sprintf("  I^2: %.1f%%\n", results$main_nma$I2.random * 100))
   }
   
   # Create output object
@@ -628,7 +646,7 @@ print.cnma <- function(x, ...) {
   if (!is.null(x$results$main_nma) && 
       !inherits(x$results$main_nma, "try-error")) {
     cat(sprintf("  Tau: %.4f\n", x$results$main_nma$tau))
-    cat(sprintf("  I²: %.1f%%\n", x$results$main_nma$I2.random * 100))
+    cat(sprintf("  I^2: %.1f%%\n", x$results$main_nma$I2.random * 100))
   }
   
   invisible(x)
@@ -698,4 +716,5 @@ cnma_quickstart <- function(data = NULL,
 # ---- Package Documentation ----
 
 #' @keywords internal
+#' @noRd
 "_PACKAGE"
